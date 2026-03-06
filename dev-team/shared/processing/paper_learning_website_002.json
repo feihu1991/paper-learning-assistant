@@ -1,0 +1,70 @@
+{
+  "task_id": "paper_learning_website_002",
+  "type": "be",
+  "objective": "实现论文学习助手网站的后端服务",
+  "specs": {
+    "backend_services": [
+      {
+        "name": "论文搜索服务",
+        "description": "根据论文名称搜索论文信息",
+        "endpoints": [
+          "POST /api/papers/search - 搜索论文",
+          "GET /api/papers/:id - 获取论文详情"
+        ],
+        "integrations": [
+          "arXiv API",
+          "PubMed API", 
+          "IEEE Xplore API",
+          "Google Scholar (可选)"
+        ]
+      },
+      {
+        "name": "内容生成服务",
+        "description": "生成论文学习内容和解释",
+        "endpoints": [
+          "POST /api/generate/explanation - 生成论文解释",
+          "POST /api/generate/summary - 生成摘要",
+          "POST /api/generate/diagrams - 生成图表"
+        ],
+        "technologies": [
+          "OpenAI GPT API 或本地LLM",
+          "自然语言处理库",
+          "图表生成库"
+        ]
+      },
+      {
+        "name": "用户服务",
+        "description": "管理用户数据和历史记录",
+        "endpoints": [
+          "POST /api/users/search-history - 保存搜索历史",
+          "GET /api/users/history - 获取历史记录",
+          "POST /api/users/favorites - 收藏论文"
+        ]
+      }
+    ],
+    "database_design": {
+      "tables": [
+        "papers (论文信息)",
+        "users (用户信息)", 
+        "search_history (搜索历史)",
+        "favorites (收藏记录)",
+        "generated_content (生成内容)"
+      ]
+    },
+    "technical_stack": {
+      "language": "Node.js (推荐) 或 Python",
+      "framework": "Express.js 或 FastAPI",
+      "database": "PostgreSQL 或 MongoDB",
+      "cache": "Redis (可选)",
+      "queue": "Bull 或 Celery (可选)"
+    }
+  },
+  "shared_context": [
+    "/dev-team/shared/docs/tech_stack.md",
+    "/dev-team/shared/docs/api_style.md",
+    "/dev-team/shared/output/architect/paper_learning_website_architecture.md"
+  ],
+  "priority": "high",
+  "deadline": "2026-03-06T18:00:00Z",
+  "output_location": "/dev-team/shared/output/be/paper_learning_website_backend/"
+}

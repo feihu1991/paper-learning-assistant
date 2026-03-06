@@ -1,0 +1,21 @@
+{
+  "task_id": "architect_startup_001",
+  "type": "architect",
+  "objective": "启动 Architect Agent 并验证架构设计能力",
+  "specs": {
+    "action": "startup",
+    "verify_design_tools": true,
+    "test_architecture_patterns": true,
+    "validate_decision_framework": true,
+    "generate_sample_design": true
+  },
+  "shared_context": [
+    "/dev-team/shared/docs/architect_agent_config.md",
+    "/dev-team/shared/docs/tech_stack.md",
+    "/dev-team/shared/docs/architecture_principles.md"
+  ],
+  "priority": "high",
+  "deadline": "2026-03-06T08:00:00Z",
+  "created_by": "PM",
+  "created_at": "2026-03-06T07:44:00Z"
+}

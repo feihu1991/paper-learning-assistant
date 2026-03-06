@@ -1,0 +1,111 @@
+{
+  "task_id": "qa_001",
+  "type": "qa",
+  "objective": "测试用户管理模块的质量保证",
+  "description": "对用户管理模块进行全面的质量测试，包括功能测试、性能测试和代码质量检查",
+  "specs": {
+    "test_types": ["unit", "integration", "performance"],
+    "code_path": "/dev-team/shared/output/be/user-management/",
+    "test_framework": "jest",
+    "coverage_threshold": 80,
+    "performance_targets": {
+      "response_time": "200ms",
+      "concurrent_users": 1000,
+      "error_rate": "0.1%",
+      "throughput": "800 req/s"
+    },
+    "quality_requirements": {
+      "eslint_errors": 0,
+      "eslint_warnings": 5,
+      "complexity_level": "medium",
+      "duplication_threshold": "3%"
+    },
+    "security_checks": ["sqli", "xss", "auth_bypass"]
+  },
+  "shared_context": [
+    "/dev-team/shared/docs/qa_agent_config.md",
+    "/dev-team/shared/docs/test_guidelines.md",
+    "/dev-team/shared/docs/api_style.md"
+  ],
+  "priority": "high",
+  "deadline": "2024-03-10T18:00:00+08:00",
+  "dependencies": ["be_001"],
+  "output_requirements": {
+    "reports": ["html", "json", "junit"],
+    "artifacts": ["coverage", "logs", "performance_metrics"],
+    "delivery_path": "/dev-team/shared/output/qa/qa_001/"
+  },
+  "acceptance_criteria": [
+    "单元测试通过率 ≥ 95%",
+    "集成测试通过率 ≥ 90%",
+    "代码覆盖率 ≥ 80%",
+    "API 平均响应时间 ≤ 200ms",
+    "无 Critical/High 级别安全漏洞",
+    "ESLint 错误数为 0"
+  ],
+  "test_scenarios": [
+    {
+      "name": "用户注册流程",
+      "description": "测试用户注册的完整流程",
+      "steps": [
+        "验证邮箱格式",
+        "检查密码强度",
+        "验证唯一性约束",
+        "发送验证邮件"
+      ]
+    },
+    {
+      "name": "用户登录认证",
+      "description": "测试用户登录和认证功能",
+      "steps": [
+        "验证用户名密码",
+        "生成 JWT Token",
+        "Token 有效期验证",
+        "刷新 Token 功能"
+      ]
+    },
+    {
+      "name": "用户信息管理",
+      "description": "测试用户信息的增删改查",
+      "steps": [
+        "创建用户信息",
+        "查询用户列表",
+        "更新用户信息",
+        "删除用户账户"
+      ]
+    }
+  ],
+  "performance_test_cases": [
+    {
+      "name": "高并发注册",
+      "description": "模拟 1000 用户同时注册",
+      "concurrent_users": 1000,
+      "duration": "5m",
+      "expected_error_rate": "≤ 0.1%"
+    },
+    {
+      "name": "持续负载登录",
+      "description": "持续 10 分钟的用户登录压力测试",
+      "concurrent_users": 500,
+      "duration": "10m",
+      "expected_response_time": "≤ 300ms"
+    }
+  ],
+  "security_test_cases": [
+    {
+      "name": "SQL 注入防护",
+      "description": "测试 SQL 注入攻击防护",
+      "attack_vectors": ["' OR '1'='1", "DROP TABLE users", "UNION SELECT"]
+    },
+    {
+      "name": "XSS 攻击防护",
+      "description": "测试跨站脚本攻击防护",
+      "attack_vectors": ["<script>alert('xss')</script>", "<img src=x onerror=alert(1)>"]
+    },
+    {
+      "name": "认证绕过",
+      "description": "测试认证机制的安全性",
+      "test_cases": ["未授权访问", "Token 篡改", "会话劫持"]
+    }
+  ]
+}

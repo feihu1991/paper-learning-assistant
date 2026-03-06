@@ -1,0 +1,206 @@
+{
+  "task_id": "architect_001",
+  "type": "architect",
+  "objective": "设计电商平台微服务架构",
+  "description": "为新兴电商平台设计可扩展的微服务架构，支持百万级用户和快速增长的业务需求",
+  "specs": {
+    "project_scope": {
+      "business_domain": "B2C电商平台",
+      "scale_requirements": {
+        "daily_users": "100万",
+        "transactions_per_second": "1000",
+        "data_volume": "10TB/年",
+        "growth_rate": "月增长20%"
+      },
+      "quality_requirements": {
+        "availability": "99.99%",
+        "latency": "P95 < 200ms",
+        "recovery_time": "< 5分钟",
+        "security_level": "PCI DSS合规"
+      }
+    },
+    "constraints": {
+      "team_size": "20人开发团队",
+      "timeline": "3个月上线MVP，6个月完整功能",
+      "budget": "中等预算，优先使用开源方案",
+      "technical_constraints": [
+        "团队熟悉JavaScript/TypeScript",
+        "需要支持移动端和Web端",
+        "与现有支付系统集成",
+        "符合中国网络安全法"
+      ]
+    },
+    "architecture_considerations": {
+      "patterns": ["microservices", "event-driven"],
+      "communication": ["REST API", "gRPC", "Kafka"],
+      "data_management": [
+        "PostgreSQL (事务数据)",
+        "MongoDB (商品目录)",
+        "Redis (缓存)",
+        "Elasticsearch (搜索)"
+      ],
+      "deployment": ["kubernetes", "docker", "aws/aliyun"]
+    }
+  },
+  "shared_context": [
+    "/dev-team/shared/docs/architect_agent_config.md",
+    "/dev-team/shared/docs/tech_stack.md",
+    "/dev-team/shared/docs/api_style.md",
+    "/dev-team/shared/docs/deployment_guidelines.md"
+  ],
+  "priority": "high",
+  "deadline": "2024-03-15T18:00:00+08:00",
+  "dependencies": [],
+  "deliverables": {
+    "architecture_documents": [
+      "系统架构设计文档",
+      "微服务拆分方案",
+      "数据库设计规范",
+      "API网关设计",
+      "监控和告警方案"
+    ],
+    "decision_records": [
+      "微服务 vs 单体架构决策",
+      "技术栈选型理由",
+      "数据库选型分析",
+      "部署策略选择",
+      "安全架构设计"
+    ],
+    "implementation_guidance": [
+      "开发环境搭建指南",
+      "CI/CD流水线设计",
+      "测试策略和框架",
+      "性能优化指南",
+      "灾难恢复方案"
+    ]
+  },
+  "service_design": [
+    {
+      "service_name": "user-service",
+      "responsibility": "用户管理、认证授权",
+      "technology": "Node.js + TypeScript + PostgreSQL",
+      "scale": "3 replicas, 自动扩缩容",
+      "apis": ["/api/users/*", "/api/auth/*"]
+    },
+    {
+      "service_name": "product-service",
+      "responsibility": "商品管理、分类搜索",
+      "technology": "Node.js + MongoDB + Elasticsearch",
+      "scale": "5 replicas, 读写分离",
+      "apis": ["/api/products/*", "/api/categories/*"]
+    },
+    {
+      "service_name": "order-service",
+      "responsibility": "订单管理、支付处理",
+      "technology": "Java + Spring Boot + PostgreSQL",
+      "scale": "10 replicas, 高可用",
+      "apis": ["/api/orders/*", "/api/payments/*"]
+    },
+    {
+      "service_name": "inventory-service",
+      "responsibility": "库存管理、物流跟踪",
+      "technology": "Go + PostgreSQL + Redis",
+      "scale": "5 replicas, 强一致性",
+      "apis": ["/api/inventory/*", "/api/shipping/*"]
+    },
+    {
+      "service_name": "notification-service",
+      "responsibility": "消息通知、推送",
+      "technology": "Python + Redis + Kafka",
+      "scale": "3 replicas, 异步处理",
+      "apis": ["/api/notifications/*"]
+    }
+  ],
+  "infrastructure_design": {
+    "kubernetes_cluster": {
+      "nodes": "3 master + 5 worker nodes",
+      "ingress": "Nginx Ingress Controller",
+      "service_mesh": "Istio (可选)",
+      "monitoring": "Prometheus + Grafana"
+    },
+    "database_cluster": {
+      "postgresql": "主从复制，读写分离",
+      "mongodb": "分片集群",
+      "redis": "哨兵模式集群",
+      "backup": "每日全量 + 实时增量备份"
+    },
+    "message_queue": {
+      "kafka": "3节点集群",
+      "topics": ["orders", "payments", "notifications"],
+      "retention": "7天"
+    }
+  },
+  "evaluation_criteria": {
+    "scalability": "支持水平扩展到100个服务实例",
+    "performance": "API响应时间P95 < 200ms",
+    "maintainability": "平均故障修复时间 < 30分钟",
+    "security": "通过安全扫描，无高危漏洞",
+    "cost_efficiency": "基础设施成本控制在$5000/月以内"
+  },
+  "timeline": {
+    "analysis_phase": "1周",
+    "design_phase": "2周",
+    "review_phase": "1周",
+    "total": "4周"
+  },
+  "stakeholders": {
+    "business": "产品经理、业务负责人",
+    "development": "前端、后端、移动端团队",
+    "operations": "运维、DBA团队",
+    "security": "安全合规团队"
+  },
+  "risk_assessment": {
+    "technical_risks": [
+      {
+        "risk": "微服务间通信延迟",
+        "probability": "中",
+        "impact": "高",
+        "mitigation": "使用异步消息队列，实现最终一致性"
+      },
+      {
+        "risk": "分布式事务一致性",
+        "probability": "高",
+        "impact": "高",
+        "mitigation": "采用Saga模式，设计补偿事务"
+      },
+      {
+        "risk": "服务发现和负载均衡",
+        "probability": "低",
+        "impact": "中",
+        "mitigation": "使用成熟的Service Mesh方案"
+      }
+    ],
+    "business_risks": [
+      {
+        "risk": "业务需求频繁变更",
+        "probability": "高",
+        "impact": "中",
+        "mitigation": "采用敏捷开发，设计灵活可扩展的架构"
+      },
+      {
+        "risk": "用户增长超出预期",
+        "probability": "中",
+        "impact": "高",
+        "mitigation": "设计弹性架构，支持快速扩容"
+      }
+    ]
+  },
+  "success_metrics": {
+    "design_quality": "架构评审通过率 ≥ 90%",
+    "team_satisfaction": "开发团队满意度 ≥ 4/5",
+    "implementation_ease": "架构迁移成本 < 2人月",
+    "future_proofing": "支持未来2年业务增长"
+  },
+  "cost_estimation": {
+    "development_cost": "20人 × 3个月 = 60人月",
+    "infrastructure_cost": "$3000-5000/月",
+    "maintenance_cost": "$1000-2000/月",
+    "total_first_year": "$80,000-120,000"
+  },
+  "next_steps": [
+    "召开架构设计评审会议",
+    "创建详细的技术设计文档",
+    "搭建原型验证关键技术",
+    "制定分阶段实施计划"
+  ]
+}

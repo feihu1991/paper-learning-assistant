@@ -1,0 +1,104 @@
+{
+  "task_id": "architect_template",
+  "type": "architect",
+  "objective": "架构设计任务模板",
+  "description": "用于创建Architect Agent架构设计任务的模板文件",
+  "specs": {
+    "project_scope": {
+      "business_domain": "业务领域描述",
+      "scale_requirements": {
+        "daily_users": "日活跃用户数",
+        "transactions_per_second": "每秒事务数",
+        "data_volume": "数据量预估",
+        "growth_rate": "预计增长率"
+      },
+      "quality_requirements": {
+        "availability": "可用性要求 (如: 99.99%)",
+        "latency": "延迟要求 (如: < 200ms)",
+        "recovery_time": "故障恢复时间",
+        "security_level": "安全等级要求"
+      }
+    },
+    "constraints": {
+      "team_size": "团队规模",
+      "timeline": "项目时间线",
+      "budget": "预算限制",
+      "technical_constraints": ["现有技术栈", "遗留系统", "合规要求"]
+    },
+    "architecture_considerations": {
+      "patterns": ["microservices", "monolith", "event-driven", "layered"],
+      "communication": ["REST", "gRPC", "message-queue", "event-bus"],
+      "data_management": ["RDBMS", "NoSQL", "cache", "search-engine"],
+      "deployment": ["kubernetes", "docker", "serverless", "paas"]
+    }
+  },
+  "shared_context": [
+    "/dev-team/shared/docs/architect_agent_config.md",
+    "/dev-team/shared/docs/tech_stack.md",
+    "/dev-team/shared/docs/api_style.md"
+  ],
+  "deliverables": {
+    "architecture_documents": [
+      "架构设计文档",
+      "技术选型报告",
+      "系统组件图",
+      "数据流图",
+      "API设计规范"
+    ],
+    "decision_records": [
+      "架构决策记录",
+      "技术选型理由",
+      "风险评估报告",
+      "演进路线图"
+    ],
+    "implementation_guidance": [
+      "开发指南",
+      "部署手册",
+      "监控方案",
+      "安全规范"
+    ]
+  },
+  "evaluation_criteria": {
+    "scalability": "系统可扩展性评估",
+    "performance": "性能指标评估",
+    "maintainability": "可维护性评估",
+    "security": "安全性评估",
+    "cost_efficiency": "成本效益评估"
+  },
+  "timeline": {
+    "analysis_phase": "需求分析阶段时间",
+    "design_phase": "架构设计阶段时间",
+    "review_phase": "评审优化阶段时间",
+    "total": "总时间预估"
+  },
+  "stakeholders": {
+    "business": "业务方代表",
+    "development": "开发团队",
+    "operations": "运维团队",
+    "security": "安全团队"
+  },
+  "risk_assessment": {
+    "technical_risks": [
+      {
+        "risk": "技术风险描述",
+        "probability": "发生概率",
+        "impact": "影响程度",
+        "mitigation": "缓解措施"
+      }
+    ],
+    "business_risks": [
+      {
+        "risk": "业务风险描述",
+        "probability": "发生概率",
+        "impact": "影响程度",
+        "mitigation": "缓解措施"
+      }
+    ]
+  },
+  "success_metrics": {
+    "design_quality": "架构设计质量评分",
+    "team_satisfaction": "团队满意度",
+    "implementation_ease": "实施难易度",
+    "future_proofing": "未来适应性"
+  }
+}

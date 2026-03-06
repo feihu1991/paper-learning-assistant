@@ -1,0 +1,11 @@
+{
+  "task_id": "architect_template",
+  "task_type": "architect",
+  "objective": "架构设计任务模板",
+  "status": "completed",
+  "started_at": "2026-03-06T00:58:12.860Z",
+  "completed_at": "2026-03-06T00:58:12.860Z",
+  "agent": "architect",
+  "output_file": "C:\\Users\\win\\dev-team\\pm\\dev-team\\shared\\output\\architect\\architect_template_architecture.md",
+  "notes": "通用架构设计已完成"
+}

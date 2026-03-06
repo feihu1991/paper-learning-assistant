@@ -1,0 +1,17 @@
+{
+  "name": "005",
+  "version": "1.0.0",
+  "description": "对接后端API，实现完整的搜索和分析功能",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build"
+  },
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.0.3",
+    "vite": "^4.4.5"
+  }
+}

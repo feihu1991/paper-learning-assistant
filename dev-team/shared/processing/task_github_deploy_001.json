@@ -1,0 +1,35 @@
+{
+  "task_id": "github_deploy_001",
+  "type": "devops",
+  "objective": "将论文学习助手网站项目推送到GitHub并配置自动部署",
+  "specs": {
+    "project_name": "paper-learning-assistant",
+    "repository_url": "https://github.com/yourusername/paper-learning-assistant",
+    "deployment_targets": ["GitHub Pages", "Docker Hub", "Vercel"],
+    "ci_cd_config": {
+      "github_actions": true,
+      "auto_deploy": true,
+      "docker_build": true,
+      "test_automation": true
+    },
+    "documentation": {
+      "readme": true,
+      "api_docs": true,
+      "deployment_guide": true,
+      "contributing_guide": true
+    }
+  },
+  "shared_context": [
+    "/dev-team/shared/docs/api_style.md",
+    "/dev-team/shared/output/architect/paper_learning_website_architecture.md"
+  ],
+  "priority": "high",
+  "deadline": "2026-03-06T12:00:00Z",
+  "status": "completed",
+  "completed_at": "2026-03-06T01:14:00Z",
+  "output_files": [
+    "/dev-team/shared/github_deploy/paper-learning-assistant/",
+    "/dev-team/shared/scripts/deploy_to_github.js"
+  ],
+  "notes": "项目已打包为完整的GitHub仓库，包含前后端代码、Docker配置、GitHub Actions工作流和完整文档。用户只需按照README.md中的说明操作即可部署到GitHub。"
+}

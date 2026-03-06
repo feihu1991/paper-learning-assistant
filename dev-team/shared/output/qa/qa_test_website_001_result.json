@@ -1,0 +1,9 @@
+{
+  "task_id": "qa_test_website_001",
+  "task_type": "qa",
+  "objective": "自动测试论文学习助手网站的功能、兼容性和性能",
+  "status": "processing",
+  "started_at": "2026-03-06T02:52:17.183Z",
+  "agent": "qa",
+  "notes": "任务已分配给 qa agent，处理脚本待实现"
+}

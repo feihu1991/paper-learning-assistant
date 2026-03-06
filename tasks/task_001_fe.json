@@ -1,0 +1,44 @@
+{
+  "task_id": "001",
+  "type": "frontend",
+  "objective": "开发 OpenClaw 安装指南网站前端",
+  "description": "参考 minimax 官网风格，开发安装指南网站",
+  "specs": {
+    "pages": [
+      {
+        "name": "首页",
+        "path": "/",
+        "content": "Hero区域 + 特性介绍 + 快速开始入口"
+      },
+      {
+        "name": "安装指南",
+        "path": "/docs/install",
+        "content": "Windows/Mac/Linux 安装步骤、环境要求、依赖说明"
+      },
+      {
+        "name": "配置教程",
+        "path": "/docs/config",
+        "content": "配置文件说明、渠道设置、模型配置"
+      },
+      {
+        "name": "常见问题",
+        "path": "/docs/faq",
+        "content": "FAQ 列表"
+      }
+    ],
+    "style": {
+      "reference": "minimax 官网风格",
+      "theme": "深色专业风格",
+      "colors": ["#1a1a2e", "#16213e", "#0f3460", "#e94560"],
+      "font": "现代简洁字体"
+    },
+    "features": [
+      "响应式设计",
+      "代码高亮",
+      "复制按钮",
+      "侧边栏导航"
+    ]
+  },
+  "status": "pending",
+  "created_at": "2026-03-04T19:59:00Z"
+}

@@ -1,0 +1,21 @@
+{
+  "task_id": "frontend_001",
+  "type": "fe",
+  "objective": "实现前端用户界面",
+  "specs": {
+    "pages": [
+      "首页",
+      "用户详情页",
+      "设置页"
+    ],
+    "framework": "React",
+    "styling": "Tailwind CSS",
+    "state_management": "Redux"
+  },
+  "shared_context": [
+    "/dev-team/shared/docs/ui_style.md"
+  ],
+  "priority": "medium",
+  "deadline": "2026-03-07T12:00:00Z",
+  "output_location": "/dev-team/shared/output/fe/"
+}

@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>配置教程 - OpenClaw</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+</head>
+<body>
+    <header class="header">
+        <nav class="nav">
+            <div class="logo">
+                <span class="logo-icon">⚡</span>
+                <span class="logo-text">OpenClaw</span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">首页</a></li>
+                <li><a href="install.html">安装指南</a></li>
+                <li><a href="config.html" class="active">配置教程</a></li>
+                <li><a href="faq.html">常见问题</a></li>
+            </ul>
+            <button class="mobile-menu-btn">☰</button>
+        </nav>
+    </header>
+
+    <div class="page-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-section">
+                <h4 class="sidebar-title">目录</h4>
+                <ul class="sidebar-nav">
+                    <li><a href="#config-location" class="sidebar-link active">配置文件位置</a></li>
+                    <li><a href="#config-structure" class="sidebar-link">配置结构</a></li>
+                    <li><a href="#channels" class="sidebar-link">渠道配置</a></li>
+                    <li><a href="#agents" class="sidebar-link">代理配置</a></li>
+                    <li><a href="#whitelist" class="sidebar-link">白名单设置</a></li>
+                    <li><a href="#dashboard" class="sidebar-link">控制台使用</a></li>
+                </ul>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="page-content">
+            <h1 class="page-title">配置教程</h1>
+            <p class="page-desc">了解如何配置 OpenClaw 以满足您的需求。</p>
+
+            <!-- Config Location -->
+            <section id="config-location" class="content-section">
+                <h2>配置文件位置</h2>
+                <p>OpenClaw 的配置文件位于用户主目录下：</p>
+                
+                <div class="code-block">
+                    <div class="code-header">
+                        <span>配置文件路径</span>
+                        <button class="copy-btn" data-code="~/.openclaw/openclaw.json">复制</button>
+                    </div>
+                    <pre><code class="language-bash"># macOS / Linux
+~/.openclaw/openclaw.json
+
+# Windows
+%USERPROFILE%\.openclaw\openclaw.json</code></pre>
+                </div>
+
+                <div class="info-box tip">
+                    <strong>💡 提示：</strong> 首次运行 <code>openclaw onboard</code> 会自动创建默认配置文件。
+                </div>
+            </section>
+
+            <!-- Config Structure -->
+            <section id="config-structure" class="content-section">
+                <h2>配置结构</h2>
+                <p>配置文件采用 JSON 格式，主要包含以下部分：</p>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span>完整配置示例</span>
+                        <button class="copy-btn">复制</button>
+                    </div>
+                    <pre><code class="language-json">{
+  "version": "1.0",
+  "gateway": {
+    "host": "0.0.0.0",
+    "port": 3000
+  },
+  "channels": {
+    "whatsapp": {
+      "enabled": true
+    },
+    "telegram": {
+      "enabled": true,
+      "botToken": "YOUR_BOT_TOKEN"
+    },
+    "discord": {
+      "enabled": true,
+      "botToken": "YOUR_BOT_TOKEN"
+    }
+  },
+  "agents": {
+    "default": {
+      "provider": "openai",
+      "model": "gpt-4",
+      "apiKey": "YOUR_API_KEY"
+    }
+  }
+}</code></pre>
+                </div>
+            </section>
+
+            <!-- Channels -->
+            <section id="channels" class="content-section">
+                <h2>渠道配置</h2>
+                <p>OpenClaw 支持多种消息渠道，可以在配置文件中启用。</p>
+
+                <h3>WhatsApp</h3>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span>WhatsApp 配置</span>
+                        <button class="copy-btn">复制</button>
+                    </div>
+                    <pre><code class="language-json">{
+  "channels": {
+    "whatsapp": {
+      "enabled": true,
+      "allowFrom": ["+1234567890"]
+    }
+  }
+}</code></pre>
+                </div>
+                <div class="info-box info">
+                    <strong>📝 WhatsApp 连接：</strong> 首次启用后，需要通过 Web QR 码扫描登录。
+                </div>
+
+                <h3>Telegram</h3>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span>Telegram 配置</span>
+                        <button class="copy-btn">复制</button>
+                    </div>
+                    <pre><code class="language-json">{
+  "channels": {
+    "telegram": {
+      "enabled": true,
+      "botToken": "123456789:ABCdefGHIjklMNOpqrsTUVwxyz"
+    }
+  }
+}</code></pre>
+                </div>
+                <div class="info-box info">
+                    <strong>📝 获取 Telegram Bot Token：</strong>
+                    <ol>
+                        <li>在 Telegram 中搜索 @BotFather</li>
+                        <li>发送 /newbot 创建新机器人</li>
+                        <li>复制获得的 Bot Token</li>
+                    </ol>
+                </div>
+
+                <h3>Discord</h3>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span>Discord 配置</span>
+                        <button class="copy-btn">复制</button>
+                    </div>
+                    <pre><code class="language-json">{
+  "channels": {
+    "discord": {
+      "enabled": true,
+      "botToken": "YOUR_DISCORD_BOT_TOKEN"
+    }
+  }
+}</code></pre>
+                </div>
+                <div class="info-box info">
+                    <strong>📝 获取 Discord Bot Token：</strong>
+                    <ol>
+                        <li>访问 <a href="https://discord.com/developers/applications" target="_blank">Discord Developer Portal</a></li>
+                        <li>创建新应用 → Bot → 复制 Token</li>
+                        <li>启用 Message Content Intent</li>
+                    </ol>
+                </div>
+
+                <h3>iMessage</h3>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span>iMessage 配置</span>
+                        <button class="copy-btn">复制</button>
+                    </div>
+                    <pre><code class="language-json">{
+  "channels": {
+    "imessage": {
+      "enabled": true
+    }
+  }
+}</code></pre>
+                </div>
+                <div class="info-box info">
+                    <strong>📝 iMessage 要求：</strong> 需要在 macOS 上运行，并授权辅助功能权限。
+                </div>
+            </section>
+
+            <!-- Agents -->
+            <section id="agents" class="content-section">
+                <h2>代理配置</h2>
+                <p>OpenClaw 支持配置多个 AI 代理，默认使用 Pi agent（RPC 模式）。</p>
+
+                <h3>默认代理配置</h3>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span>代理配置</span>
+                        <button class="copy-btn">复制</button>
+                    </div>
+                    <pre><code class="language-json">{
+  "agents": {
+    "default": {
+      "type": "pi",
+      "model": "claude-3-5-sonnet",
+      "rpcUrl": "https://pi-api.claude.ai"
+    }
+  }
+}</code></pre>
+                </div>
+
+                <h3>自定义 API 提供商</h3>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span>OpenAI 配置</span>
+                        <button class="copy-btn">复制</button>
+                    </div>
+                    <pre><code class="language-json">{
+  "agents": {
+    "default": {
+      "provider": "openai",
+      "model": "gpt-4",
+      "apiKey": "sk-..."
+    }
+  }
+}</code></pre>
+                </div>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span>Anthropic Claude 配置</span>
+                        <button class="copy-btn">复制</button>
+                    </div>
+                    <pre><code class="language-json">{
+  "agents": {
+    "default": {
+      "provider": "anthropic",
+      "model": "claude-3-5-sonnet-20241022",
+      "apiKey": "sk-ant-..."
+    }
+  }
+}</code></pre>
+                </div>
+
+                <h3>多代理配置</h3>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span>多代理示例</span>
+                        <button class="copy-btn">复制</button>
+                    </div>
+                    <pre><code class="language-json">{
+  "agents": {
+    "support": {
+      "type": "pi",
+      "model": "claude-3-5-sonnet"
+    },
+    "coding": {
+      "provider": "openai",
+      "model": "gpt-4",
+      "apiKey": "sk-..."
+    }
+  }
+}</code></pre>
+                </div>
+
+                <div class="info-box tip">
+                    <strong>💡 提示：</strong> 可以为不同渠道或用户分配不同的代理，实现隔离的会话管理。
+                </div>
+            </section>
+
+            <!-- Whitelist -->
+            <section id="whitelist" class="content-section">
+                <h2>白名单设置</h2>
+                <p>可以通过白名单限制哪些用户可以与代理交互。</p>
+
+                <h3>WhatsApp 白名单</h3>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span>WhatsApp 白名单</span>
+                        <button class="copy-btn">复制</button>
+                    </div>
+                    <pre><code class="language-json">{
+  "channels": {
+    "whatsapp": {
+      "enabled": true,
+      "allowFrom": ["+1234567890", "+0987654321"]
+    }
+  }
+}</code></pre>
+                </div>
+
+                <h3>Telegram 白名单</h3>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span>Telegram 白名单</span>
+                        <button class="copy-btn">复制</button>
+                    </div>
+                    <pre><code class="language-json">{
+  "channels": {
+    "telegram": {
+      "enabled": true,
+      "botToken": "...",
+      "allowFrom": [123456789, 987654321]
+    }
+  }
+}</code></pre>
+                </div>
+
+                <div class="info-box warning">
+                    <strong>⚠️ 安全建议：</strong> 生产环境建议启用白名单功能，只允许授权用户访问。
+                </div>
+            </section>
+
+            <!-- Dashboard -->
+            <section id="dashboard" class="content-section">
+                <h2>控制台使用</h2>
+                <p>OpenClaw 提供 Web 控制台进行可视化管理。</p>
+
+                <h3>打开控制台</h3>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span>打开 Dashboard</span>
+                        <button class="copy-btn" data-code="openclaw dashboard">复制</button>
+                    </div>
+                    <pre><code class="language-bash">openclaw dashboard</code></pre>
+                </div>
+
+                <h3>控制台功能</h3>
+                <ul>
+                    <li><strong>会话管理：</strong> 查看和搜索活跃会话</li>
+                    <li><strong>消息调试：</strong> 实时查看消息流和代理响应</li>
+                    <li><strong>渠道管理：</strong> 连接和配置各个消息渠道</li>
+                    <li><strong>代理配置：</strong> 设置和切换 AI 模型</li>
+                    <li><strong>日志查看：</strong> 监控系统运行状态</li>
+                </ul>
+
+                <div class="info-box info">
+                    <strong>📝 默认地址：</strong> 控制台默认在 <code>http://localhost:3000</code> 打开。
+                </div>
+            </section>
+
+            <!-- Environment Variables -->
+            <section class="content-section">
+                <h2>环境变量</h2>
+                <p>建议使用环境变量管理敏感配置：</p>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span>环境变量</span>
+                        <button class="copy-btn">复制</button>
+                    </div>
+                    <pre><code class="language-bash"># 添加到 ~/.openclaw/env 或系统环境变量
+OPENAI_API_KEY=sk-...
+ANTHROPIC_API_KEY=sk-ant-...
+TELEGRAM_BOT_TOKEN=...
+DISCORD_BOT_TOKEN=...</code></pre>
+                </div>
+
+                <div class="info-box warning">
+                    <strong>⚠️ 安全警告：</strong> 请勿将包含 API Key 的配置文件提交到版本控制系统！
+                </div>
+            </section>
+
+            <!-- Next Steps -->
+            <section class="content-section">
+                <h2>下一步</h2>
+                <p>配置完成后，您可以：</p>
+                <ul class="checklist">
+                    <li>✅ 运行 <code>openclaw gateway start</code> 启动服务</li>
+                    <li>✅ 使用 <code>openclaw dashboard</code> 打开控制台</li>
+                    <li>✅ 阅读 <a href="faq.html">常见问题</a> 了解常见问题解决方案</li>
+                </ul>
+            </section>
+        </main>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <span class="logo-icon">⚡</span>
+                <span>OpenClaw</span>
+            </div>
+            <div class="footer-links">
+                <a href="install.html">文档</a>
+                <a href="faq.html">FAQ</a>
+                <a href="https://github.com/openclaw">GitHub</a>
+            </div>
+            <p class="footer-copyright">© 2024 OpenClaw. MIT License.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-json.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

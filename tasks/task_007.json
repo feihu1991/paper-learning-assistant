@@ -1,0 +1,17 @@
+{
+  "task_id": "007",
+  "type": "pm",
+  "objective": "规划下一版本功能",
+  "specs": {
+    "current_version": "1.0",
+    "next_version": "1.1",
+    "proposals": [
+      "用户登录认证",
+      "论文收藏功能",
+      "学习进度跟踪",
+      "导出分析报告"
+    ]
+  },
+  "status": "pending",
+  "created_at": "2026-03-06T15:30:00"
+}

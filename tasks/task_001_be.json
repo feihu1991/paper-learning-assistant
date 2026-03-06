@@ -1,0 +1,22 @@
+{
+  "task_id": "001",
+  "type": "backend",
+  "objective": "为 OpenClaw 安装指南网站提供后端服务",
+  "description": "创建简单的后端服务来托管静态网站",
+  "specs": {
+    "framework": "express/static",
+    "endpoints": [
+      {
+        "path": "/",
+        "description": "静态文件服务"
+      }
+    ],
+    "features": [
+      "静态文件托管",
+      "代码高亮 highlight.js",
+      "搜索功能（可选）"
+    ]
+  },
+  "status": "pending",
+  "created_at": "2026-03-04T19:59:00Z"
+}

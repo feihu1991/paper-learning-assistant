@@ -1,0 +1,9 @@
+{
+  "task_id": "qa_template",
+  "task_type": "qa",
+  "objective": "质量保证测试任务模板",
+  "status": "processing",
+  "started_at": "2026-03-06T00:44:29.285Z",
+  "agent": "qa",
+  "notes": "任务已开始处理，等待 agent 完成"
+}

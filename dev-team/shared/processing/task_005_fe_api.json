@@ -1,0 +1,20 @@
+{
+  "task_id": "005",
+  "type": "fe",
+  "objective": "对接后端API，实现完整的搜索和分析功能",
+  "priority": "high",
+  "specs": {
+    "dependencies": ["task_004_be_api"],
+    "required_features": [
+      "搜索框输入关键词 → 调用后端搜索API → 显示结果",
+      "点击论文卡片 → 显示详情（摘要、作者、发布日期）",
+      "点击分析按钮 → 调用AI分析API → 显示解读内容"
+    ],
+    "api_endpoints": {
+      "search": "GET /api/papers?q={keyword}",
+      "detail": "GET /api/papers/:id",
+      "analyze": "POST /api/papers/analyze"
+    }
+  },
+  "shared_context": ["/dev-team/shared/docs/api_style.md"]
+}

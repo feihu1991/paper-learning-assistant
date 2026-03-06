@@ -1,0 +1,127 @@
+{
+  "task_id": "devops_template",
+  "type": "devops",
+  "objective": "运维自动化任务模板",
+  "description": "用于创建 DevOps Agent 自动化部署任务的模板文件",
+  "specs": {
+    "application": "应用名称",
+    "version": "版本号 (如: v1.2.3)",
+    "environment": "development|staging|production",
+    "deployment_strategy": "blue-green|canary|rolling",
+    "infrastructure": {
+      "platform": "kubernetes|docker-compose|cloud-run",
+      "cloud_provider": "aws|azure|gcp|aliyun",
+      "region": "区域名称 (如: us-east-1)",
+      "cluster": "集群名称 (可选)"
+    },
+    "resources": {
+      "cpu": {
+        "request": "CPU请求量 (如: 500m)",
+        "limit": "CPU限制量 (如: 1000m)"
+      },
+      "memory": {
+        "request": "内存请求量 (如: 512Mi)",
+        "limit": "内存限制量 (如: 1Gi)"
+      },
+      "storage": {
+        "size": "存储大小 (如: 10Gi)",
+        "type": "存储类型 (如: ssd)"
+      }
+    },
+    "scaling": {
+      "min_replicas": "最小副本数",
+      "max_replicas": "最大副本数",
+      "metrics": [
+        {
+          "type": "cpu|memory|custom",
+          "target": "目标值 (如: 80%)"
+        }
+      ]
+    },
+    "monitoring": {
+      "metrics": ["cpu_usage", "memory_usage", "response_time", "error_rate"],
+      "alerts": [
+        {
+          "name": "告警名称",
+          "condition": "告警条件",
+          "severity": "critical|warning|info"
+        }
+      ],
+      "dashboard": "是否创建监控仪表板"
+    },
+    "security": {
+      "image_scanning": true,
+      "vulnerability_check": true,
+      "secret_management": true,
+      "compliance_check": true
+    }
+  },
+  "shared_context": [
+    "/dev-team/shared/docs/devops_agent_config.md",
+    "/dev-team/shared/docs/deployment_guidelines.md",
+    "/dev-team/shared/docs/tech_stack.md"
+  ],
+  "priority": "high|medium|low",
+  "deadline": "ISO 8601 时间格式",
+  "dependencies": ["be_xxx", "fe_xxx", "qa_xxx"],
+  "prerequisites": [
+    "代码通过所有测试",
+    "安全扫描通过",
+    "性能测试通过",
+    "文档更新完成"
+  ],
+  "rollback_plan": {
+    "automatic": true,
+    "conditions": ["error_rate > 5%", "response_time > 2s", "health_check_failed"],
+    "steps": [
+      "切换到旧版本",
+      "验证服务状态",
+      "通知相关团队"
+    ]
+  },
+  "communication_plan": {
+    "pre_deployment": [
+      "提前24小时通知",
+      "部署计划会议",
+      "最终确认检查"
+    ],
+    "during_deployment": [
+      "实时状态更新",
+      "问题及时通报",
+      "进度汇报"
+    ],
+    "post_deployment": [
+      "部署结果通知",
+      "性能指标报告",
+      "回顾会议安排"
+    ]
+  },
+  "output_requirements": {
+    "artifacts": [
+      "部署配置",
+      "监控配置",
+      "告警规则",
+      "文档更新"
+    ],
+    "reports": [
+      "部署报告",
+      "性能报告",
+      "安全报告"
+    ],
+    "delivery_path": "/dev-team/shared/output/devops/{task_id}/"
+  },
+  "acceptance_criteria": [
+    "部署成功完成",
+    "所有服务健康检查通过",
+    "性能指标符合要求",
+    "监控和告警配置完成",
+    "文档更新完成",
+    "团队通知已发送"
+  ],
+  "success_metrics": {
+    "deployment_time": "部署耗时",
+    "success_rate": "部署成功率",
+    "rollback_rate": "回滚率",
+    "incident_count": "部署后事故数量"
+  }
+}

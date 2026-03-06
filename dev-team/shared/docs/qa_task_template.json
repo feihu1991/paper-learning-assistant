@@ -1,0 +1,23 @@
+{
+  "task_id": "qa_001",
+  "type": "qa",
+  "objective": "执行质量保证测试",
+  "specs": {
+    "test_types": [
+      "单元测试",
+      "集成测试",
+      "性能测试"
+    ],
+    "coverage_threshold": 80,
+    "performance_targets": {
+      "response_time": "200ms",
+      "error_rate": "0.1%"
+    }
+  },
+  "shared_context": [
+    "/dev-team/shared/docs/qa_standards.md"
+  ],
+  "priority": "high",
+  "deadline": "2026-03-06T16:00:00Z",
+  "output_location": "/dev-team/shared/output/qa/"
+}

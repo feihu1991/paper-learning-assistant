@@ -1,0 +1,17 @@
+{
+  "name": "dev-team-workflow",
+  "version": "1.0.0",
+  "description": "Dev Team 工作流程自动化",
+  "main": "scripts/monitor_tasks.js",
+  "scripts": {
+    "monitor": "node scripts/monitor_tasks.js",
+    "setup": "node scripts/setup_workflow.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "puppeteer": "^24.38.0"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  }
+}

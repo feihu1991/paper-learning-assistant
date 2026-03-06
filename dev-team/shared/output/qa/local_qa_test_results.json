@@ -1,0 +1,38 @@
+{
+  "timestamp": "2026-03-06T02:57:58.204Z",
+  "url": "http://localhost:5173/",
+  "tests": [
+    {
+      "name": "页面标题",
+      "status": "passed",
+      "details": "标题: 论文学习助手"
+    },
+    {
+      "name": "主标题显示",
+      "status": "passed",
+      "details": "主标题: Paper Learning Assistant"
+    },
+    {
+      "name": "搜索框和按钮",
+      "status": "passed",
+      "details": "搜索框和Search按钮存在"
+    },
+    {
+      "name": "论文卡片显示",
+      "status": "passed",
+      "details": "找到 2 个论文标题. Attention论文: ✓, BERT论文: ✓"
+    },
+    {
+      "name": "Attention Is All You Need 论文",
+      "status": "passed",
+      "details": "论文卡片已显示"
+    }
+  ],
+  "summary": {
+    "passed": 5,
+    "failed": 0,
+    "warnings": 0,
+    "passRate": "100%"
+  },
+  "overallStatus": "PASSED"
+}

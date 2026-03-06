@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>常见问题 - OpenClaw</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+</head>
+<body>
+    <header class="header">
+        <nav class="nav">
+            <div class="logo">
+                <span class="logo-icon">⚡</span>
+                <span class="logo-text">OpenClaw</span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">首页</a></li>
+                <li><a href="install.html">安装指南</a></li>
+                <li><a href="config.html">配置教程</a></li>
+                <li><a href="faq.html" class="active">常见问题</a></li>
+            </ul>
+            <button class="mobile-menu-btn">☰</button>
+        </nav>
+    </header>
+
+    <div class="page-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-section">
+                <h4 class="sidebar-title">分类</h4>
+                <ul class="sidebar-nav">
+                    <li><a href="#general" class="sidebar-link active">通用问题</a></li>
+                    <li><a href="#installation" class="sidebar-link">安装问题</a></li>
+                    <li><a href="#configuration" class="sidebar-link">配置问题</a></li>
+                    <li><a href="#channels" class="sidebar-link">渠道问题</a></li>
+                    <li><a href="#agents" class="sidebar-link">代理问题</a></li>
+                </ul>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="page-content">
+            <h1 class="page-title">常见问题</h1>
+            <p class="page-desc">解答您关于 OpenClaw 的常见问题。</p>
+
+            <!-- Search -->
+            <div class="faq-search">
+                <input type="text" id="faqSearch" placeholder="搜索问题..." class="search-input">
+            </div>
+
+            <!-- General -->
+            <section id="general" class="content-section faq-section">
+                <h2>通用问题</h2>
+
+                <div class="faq-item">
+                    <button class="faq-question">
+                        <span>OpenClaw 是什么？</span>
+                        <span class="faq-icon">+</span>
+                    </button>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            <p>OpenClaw 是一个开源的多渠道 AI 代理网关平台。它可以连接 WhatsApp、Telegram、Discord、iMessage 等多种消息渠道，并提供强大的 AI 代理能力。</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question">
+                        <span>OpenClaw 是免费的吗？</span>
+                        <span class="faq-icon">+</span>
+                    </button>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            <p>是的，OpenClaw 是完全开源且免费的项目，采用 MIT 许可证。您可以免费用于个人和商业项目。</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question">
+                        <span>OpenClaw 支持哪些渠道？</span>
+                        <span class="faq-icon">+</span>
+                    </button>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            <p>OpenClaw 支持以下消息渠道：</p>
+                            <ul>
+                                <li>WhatsApp</li>
+                                <li>Telegram</li>
+                                <li>Discord</li>
+                                <li>iMessage (macOS)</li>
+                                <li>Web 聊天</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question">
+                        <span>如何获取帮助？</span>
+                        <span class="faq-icon">+</span>
+                    </button>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            <p>您可以通过以下方式获取帮助：</p>
+                            <ul>
+                                <li>GitHub Issues：报告 bug 或提出功能请求</li>
+                                <li>GitHub Discussions：社区问答和讨论</li>
+                                <li>Discord 服务器：实时交流和帮助</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Installation -->
+            <section id="installation" class="content-section faq-section">
+                <h2>安装问题</h2>
+
+                <div class="faq-item">
+                    <button class="faq-question">
+                        <span>安装失败，提示 "command not found"</span>
+                        <span class="faq-icon">+</span>
+                    </button>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            <p>这通常是因为安装脚本未正确配置系统路径。解决方法：</p>
+                            <div class="code-block">
+                                <div class="code-header">
+                                    <span>macOS / Linux</span>
+                                    <button class="copy-btn" data-code="source ~/.bashrc">复制</button>
+                                </div>
+                                <pre><code class="language-bash"># 重新加载配置
+source ~/.bashrc  # bash
+source ~/.zshrc   # zsh
+
+# 验证安装
+which openclaw
+openclaw --version</code></pre>
+                            </div>
+                            <p>或者手动添加路径到 profile：</p>
+                            <div class="code-block">
+                                <button class="copy-btn" data-code="export PATH=\"$HOME/.openclaw/bin:$PATH\"">复制</button>
+                                <pre><code class="language-bash">echo 'export PATH="$HOME/.openclaw/bin:$PATH"' >> ~/.bashrc
+source ~/.bashrc</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question">
+                        <span>Node.js 版本不兼容</span>
+                        <span class="faq-icon">+</span>
+                    </button>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            <p>OpenClaw 需要 Node.js 22.0 或更高版本。检查当前版本：</p>
+                            <div class="code-block">
+                                <button class="copy-btn" data-code="node --version">复制</button>
+                                <pre><code class="language-bash">node --version</code></pre>
+                            </div>
+                            <p>如果版本过低，请访问 <a href="https://nodejs.org" target="_blank">nodejs.org</a> 下载最新 LTS 版本。</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question">
+                        <span>Windows 安装失败</span>
+                        <span class="faq-icon">+</span>
+                    </button>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            <p>Windows 安装可能因为权限或执行策略失败。尝试：</p>
+                            <ol>
+                                <li>以管理员身份运行 PowerShell</li>
+                                <li>检查执行策略：
+                                    <div class="code-block">
+                                        <button class="copy-btn" data-code="Set-ExecutionPolicy RemoteSigned -Scope CurrentUser">复制</button>
+                                        <pre><code class="language-bash">Set-ExecutionPolicy RemoteSigned -Scope CurrentUser</code></pre>
+                                    </div>
+                                </li>
+                                <li>重新运行安装脚本：
+                                    <div class="code-block">
+                                        <button class="copy-btn" data-code="iwr -useb https://openclaw.ai/install.ps1 | iex">复制</button>
+                                        <pre><code class="language-bash">iwr -useb https://openclaw.ai/install.ps1 | iex</code></pre>
+                                    </div>
+                                </li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question">
+                        <span>onboard 引导失败</span>
+                        <span class="faq-icon">+</span>
+                    </button>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            <p>引导程序可能需要特定权限或依赖。检查：</p>
+                            <ol>
+                                <li>网络连接是否正常</li>
+                                <li>是否有权限创建系统服务</li>
+                                <li>查看详细错误日志：
+                                    <div class="code-block">
+                                        <button class="copy-btn" data-code="openclaw onboard --install-daemon -v">复制</button>
+                                        <pre><code class="language-bash">openclaw onboard --install-daemon -v</code></pre>
+                                    </div>
+                                </li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Configuration -->
+            <section id="configuration" class="content-section faq-section">
+                <h2>配置问题</h2>
+
+                <div class="faq-item">
+                    <button class="faq-question">
+                        <span>配置文件在哪里？</span>
+                        <span class="faq-icon">+</span>
+                    </button>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            <p>配置文件位于用户主目录下：</p>
+                            <div class="code-block">
+                                <button class="copy-btn" data-code="~/.openclaw/openclaw.json">复制</button>
+                                <pre><code class="language-bash"># macOS / Linux
+~/.openclaw/openclaw.json
+
+# Windows
+%USERPROFILE%\.openclaw\openclaw.json</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question">
+                        <span>配置文件格式错误</span>
+                        <span class="faq-icon">+</span>
+                    </button>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            <p>确保配置文件是有效的 JSON 格式。可以使用在线 JSON 验证工具检查。</p>
+                            <p>常见错误：</p>
+                            <ul>
+                                <li>多余的逗号</li>
+                                <li>未闭合的引号或括号</li>
+                                <li>不支持的字段名</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question">
+                        <span>如何重启服务使配置生效？</span>
+                        <span class="faq-icon">+</span>
+                    </button>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            <p>修改配置后需要重启 Gateway：</p>
+                            <div class="code-block">
+                                <button class="copy-btn" data-code="openclaw gateway restart">复制</button>
+                                <pre><code class="language-bash"># 重启 Gateway
+openclaw gateway restart</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Channels -->
+            <section id="channels" class="content-section faq-section">
+                <h2>渠道问题</h2>
+
+                <div class="faq-item">
+                    <button class="faq-question">
+                        <span>WhatsApp 无法连接</span>
+                        <span class="faq-icon">+</span>
+                    </button>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            <p>WhatsApp 需要通过 Web 界面扫描 QR 码登录：</p>
+                            <ol>
+                                <li>确保配置文件已启用 WhatsApp：
+                                    <div class="code-block">
+                                        <button class="copy-btn">复制</button>
+                                        <pre><code class="language-json">{
+  "channels": {
+    "whatsapp": {
+      "enabled": true
+    }
+  }
+}</code></pre>
+                                    </div>
+                                </li>
+                                <li>启动 Gateway 并打开控制台</li>
+                                <li>在控制台中找到 WhatsApp 连接页面，扫描 QR 码</li>
+                                <li>检查网络是否稳定</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question">
+                        <span>Telegram 机器人没有响应</span>
+                        <span class="faq-icon">+</span>
+                    </button>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            <p>排查步骤：</p>
+                            <ol>
+                                <li>确认 Bot Token 正确配置</li>
+                                <li>检查机器人是否已与 @BotFather 完成设置</li>
+                                <li>需要启动 Privacy Mode 并禁用 group handling（如果适用）</li>
+                                <li>验证网络可以访问 Telegram API</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question">
+                        <span>Discord 机器人没有响应</span>
+                        <span class="faq-icon">+</span>
+                    </button>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            <p>可能的原因：</p>
+                            <ol>
+                                <li>确认已启用 Message Content Intent</li>
+                                <li>检查机器人权限是否足够</li>
+                                <li>确认机器人已添加到服务器</li>
+                                <li>验证 Bot Token 正确</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question">
+                        <span>iMessage 无法使用</span>
+                        <span class="faq-icon">+</span>
+                    </button>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            <p>iMessage 需要：</p>
+                            <ol>
+                                <li>在 macOS 上运行</li>
+                                <li>授予辅助功能权限（系统设置 → 隐私与安全性 → 辅助功能）</li>
+                                <li>确保已登录 iMessage 账户</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Agents -->
+            <section id="agents" class="content-section faq-section">
+                <h2>代理问题</h2>
+
+                <div class="faq-item">
+                    <button class="faq-question">
+                        <span>API Key 验证失败</span>
+                        <span class="faq-icon">+</span>
+                    </button>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            <p>常见原因：</p>
+                            <ol>
+                                <li>API Key 填写错误或有多余空格</li>
+                                <li>Key 已过期或被撤销</li>
+                                <li>账户余额不足</li>
+                                <li>使用了错误的 API 端点</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question">
+                        <span>如何切换不同的 AI 模型？</span>
+                        <span class="faq-icon">+</span>
+                    </button>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            <p>在配置文件中修改代理配置：</p>
+                            <div class="code-block">
+                                <button class="copy-btn">复制</button>
+                                <pre><code class="language-json">{
+  "agents": {
+    "default": {
+      "provider": "openai",
+      "model": "gpt-4",
+      "apiKey": "sk-..."
+    }
+  }
+}</code></pre>
+                            </div>
+                            <p>支持的模型：OpenAI GPT 系列、Anthropic Claude 系列、Pi Agent 等。</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question">
+                        <span>Pi Agent 是什么？如何使用？</span>
+                        <span class="faq-icon">+</span>
+                    </button>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            <p>Pi Agent 是 OpenClaw 默认使用的代理模式，通过 RPC 连接到 Infeline 的 Pi API。</p>
+                            <div class="code-block">
+                                <button class="copy-btn">复制</button>
+                                <pre><code class="language-json">{
+  "agents": {
+    "default": {
+      "type": "pi",
+      "model": "claude-3-5-sonnet",
+      "rpcUrl": "https://pi-api.claude.ai"
+    }
+  }
+}</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question">
+                        <span>API 调用超时</span>
+                        <span class="faq-icon">+</span>
+                    </button>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            <p>可能原因和解决方案：</p>
+                            <ol>
+                                <li>网络连接问题 - 检查网络或使用代理</li>
+                                <li>API 服务端负载高 - 稍后重试</li>
+                                <li>请求内容过长 - 减少上下文或分批处理</li>
+                                <li>增加超时配置</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Contact -->
+            <section class="content-section">
+                <div class="info-box info">
+                    <strong>没有找到答案？</strong>
+                    <p>请访问 <a href="https://github.com/openclaw" target="_blank">GitHub</a> 提交问题，或加入社区寻求帮助。</p>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <span class="logo-icon">⚡</span>
+                <span>OpenClaw</span>
+            </div>
+            <div class="footer-links">
+                <a href="install.html">文档</a>
+                <a href="faq.html">FAQ</a>
+                <a href="https://github.com/openclaw">GitHub</a>
+            </div>
+            <p class="footer-copyright">© 2024 OpenClaw. MIT License.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-json.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

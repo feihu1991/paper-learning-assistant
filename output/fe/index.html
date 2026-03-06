@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OpenClaw - 智能代理编排平台</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+</head>
+<body>
+    <header class="header">
+        <nav class="nav">
+            <div class="logo">
+                <span class="logo-icon">⚡</span>
+                <span class="logo-text">OpenClaw</span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html" class="active">首页</a></li>
+                <li><a href="install.html">安装指南</a></li>
+                <li><a href="config.html">配置教程</a></li>
+                <li><a href="faq.html">常见问题</a></li>
+            </ul>
+            <button class="mobile-menu-btn">☰</button>
+        </nav>
+    </header>
+
+    <main class="main-content">
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="hero-content">
+                <div class="hero-badge">🚀 开源免费</div>
+                <h1 class="hero-title">
+                    智能代理编排<br>
+                    <span class="gradient-text">从这里开始</span>
+                </h1>
+                <p class="hero-desc">
+                    OpenClaw 是强大的多渠道网关平台，支持 WhatsApp、Telegram、Discord、iMessage 等多种消息渠道，助您轻松构建 AI 代理和工作流自动化。
+                </p>
+                <div class="hero-actions">
+                    <a href="install.html" class="btn btn-primary">快速开始</a>
+                    <a href="https://github.com/openclaw" target="_blank" class="btn btn-secondary">
+                        <span>⭐</span> GitHub
+                    </a>
+                </div>
+                <div class="hero-stats">
+                    <div class="stat">
+                        <span class="stat-value">10K+</span>
+                        <span class="stat-label">用户</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-value">6+</span>
+                        <span class="stat-label">渠道</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-value">50+</span>
+                        <span class="stat-label">插件</span>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="code-window">
+                    <div class="code-header">
+                        <span class="dot red"></span>
+                        <span class="dot yellow"></span>
+                        <span class="dot green"></span>
+                    </div>
+                    <pre><code class="language-bash"># 安装 OpenClaw
+curl -fsSL https://openclaw.ai/install.sh | bash
+
+# 启动服务
+openclaw gateway start
+
+# 打开控制台
+openclaw dashboard</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section class="features">
+            <h2 class="section-title">为什么选择 OpenClaw</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">💬</div>
+                    <h3>多渠道网关</h3>
+                    <p>支持 WhatsApp、Telegram、Discord、iMessage 等多种消息平台，统一管理所有渠道</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🤖</div>
+                    <h3>多代理路由</h3>
+                    <p>支持隔离的会话管理 per agent/workspace/sender，灵活配置多个 AI 代理</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🧩</div>
+                    <h3>插件系统</h3>
+                    <p>丰富的插件生态，支持 Mattermost 等扩展，轻松定制您的自动化流程</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🖼️</div>
+                    <h3>媒体支持</h3>
+                    <p>完整支持图片、音频、文档等多种媒体格式，AI 可分析处理多媒体内容</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📱</div>
+                    <h3>移动节点</h3>
+                    <p>支持 iOS/Android 设备配对，将手机变为分布式节点，接收推送通知</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🖥️</div>
+                    <h3>Web 控制台</h3>
+                    <p>浏览器 Dashboard 可视化管理，实时监控会话、调试消息、配置代理</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Quick Start Section -->
+        <section class="quick-start">
+            <h2 class="section-title">快速开始</h2>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h3>安装 OpenClaw</h3>
+                        <p>使用官方安装脚本一键安装</p>
+                        <div class="code-block">
+                            <button class="copy-btn" data-code="curl -fsSL https://openclaw.ai/install.sh | bash">复制</button>
+                            <pre><code class="language-bash"># macOS / Linux
+curl -fsSL https://openclaw.ai/install.sh | bash
+
+# Windows (PowerShell)
+iwr -useb https://openclaw.ai/install.ps1 | iex</code></pre>
+                        </div>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h3>引导配置</h3>
+                        <p>运行引导程序安装守护进程</p>
+                        <div class="code-block">
+                            <button class="copy-btn" data-code="openclaw onboard --install-daemon">复制</button>
+                            <pre><code class="language-bash">openclaw onboard --install-daemon</code></pre>
+                        </div>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h3>启动并使用</h3>
+                        <p>启动网关服务，打开 Web 控制台</p>
+                        <div class="code-block">
+                            <button class="copy-btn" data-code="openclaw gateway start && openclaw dashboard">复制</button>
+                            <pre><code class="language-bash"># 启动网关
+openclaw gateway start
+
+# 打开控制台
+openclaw dashboard</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section class="cta">
+            <div class="cta-content">
+                <h2>准备好开始了吗？</h2>
+                <p>加入数千名开发者，使用 OpenClaw 构建强大的多渠道 AI 代理</p>
+                <a href="install.html" class="btn btn-primary">立即开始 →</a>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <span class="logo-icon">⚡</span>
+                <span>OpenClaw</span>
+            </div>
+            <div class="footer-links">
+                <a href="install.html">文档</a>
+                <a href="faq.html">FAQ</a>
+                <a href="https://github.com/openclaw">GitHub</a>
+            </div>
+            <p class="footer-copyright">© 2024 OpenClaw. MIT License.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

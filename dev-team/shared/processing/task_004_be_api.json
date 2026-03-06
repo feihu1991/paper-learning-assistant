@@ -1,0 +1,17 @@
+{
+  "task_id": "004",
+  "type": "be",
+  "objective": "提供API接口文档并确保后端服务运行",
+  "priority": "high",
+  "specs": {
+    "required_apis": [
+      "GET /api/papers - 搜索论文列表",
+      "GET /api/papers/:id - 获取论文详情",
+      "POST /api/papers/analyze - AI分析论文"
+    ],
+    "data_source": "arXiv API / Semantic Scholar API",
+    "mock_data": "如后端未完成，需提供mock数据接口"
+  },
+  "shared_context": ["/dev-team/shared/docs/api_style.md"],
+  "blocking": ["前端依赖此API完成搜索和分析功能"]
+}

@@ -1,0 +1,26 @@
+{
+  "task_id": "002",
+  "type": "backend",
+  "objective": "创建论文学习助手后端API",
+  "specs": {
+    "models": ["Paper(id, title, abstract, summary, created_at)", "Explanation(id, paper_id, section, content, image_url, created_at)"],
+    "endpoints": [
+      "POST /api/papers/search - 搜索论文",
+      "POST /api/papers/explain - 生成论文解释",
+      "GET /api/papers/:id - 获取论文详情",
+      "GET /api/papers/:id/explanations - 获取论文解释列表"
+    ],
+    "features": [
+      "集成AI API生成文本解释",
+      "集成AI API生成解释性图片",
+      "数据库存储论文和解释"
+    ]
+  },
+  "shared_context": ["/dev-team/shared/docs/api_style.md"],
+  "requirements": [
+    "使用Express.js框架",
+    "支持OpenAI或DeepSeek API",
+    "使用SQLite或MySQL数据库",
+    "实现错误处理和日志记录"
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "task_id": "qa_startup_001",
+  "type": "qa",
+  "objective": "启动 QA Agent 并验证配置",
+  "specs": {
+    "action": "startup",
+    "verify_config": true,
+    "test_environment": true,
+    "generate_status_report": true
+  },
+  "shared_context": [
+    "/dev-team/shared/docs/qa_agent_config.md",
+    "/dev-team/shared/docs/test_guidelines.md",
+    "/dev-team/shared/docs/tech_stack.md"
+  ],
+  "priority": "high",
+  "deadline": "2026-03-06T08:00:00Z",
+  "created_by": "PM",
+  "created_at": "2026-03-06T07:42:00Z"
+}

@@ -1,0 +1,9 @@
+{
+  "task_id": "qa_startup_001",
+  "task_type": "qa",
+  "objective": "启动 QA Agent 并验证配置",
+  "status": "processing",
+  "started_at": "2026-03-06T00:44:26.198Z",
+  "agent": "qa",
+  "notes": "任务已开始处理，等待 agent 完成"
+}

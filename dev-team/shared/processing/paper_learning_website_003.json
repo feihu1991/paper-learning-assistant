@@ -1,0 +1,68 @@
+{
+  "task_id": "paper_learning_website_003",
+  "type": "fe",
+  "objective": "实现论文学习助手网站的前端界面",
+  "specs": {
+    "pages": [
+      {
+        "name": "首页",
+        "description": "论文搜索和功能介绍",
+        "components": [
+          "搜索框 (论文名称输入)",
+          "功能说明区域",
+          "热门论文推荐",
+          "使用示例展示"
+        ]
+      },
+      {
+        "name": "论文详情页",
+        "description": "展示论文学习内容",
+        "components": [
+          "论文基本信息 (标题、作者、摘要)",
+          "学习内容区域 (解释、关键概念)",
+          "图表展示区域",
+          "学习路径导航",
+          "相关资源推荐",
+          "下载/分享功能"
+        ]
+      },
+      {
+        "name": "用户历史页",
+        "description": "查看搜索历史和收藏",
+        "components": [
+          "搜索历史列表",
+          "收藏论文列表",
+          "学习进度跟踪"
+        ]
+      }
+    ],
+    "ui_requirements": {
+      "design_system": "现代化、学术风格",
+      "responsive": "支持桌面和移动端",
+      "accessibility": "符合WCAG标准",
+      "performance": "快速加载和响应"
+    },
+    "interactive_features": [
+      "实时搜索建议",
+      "图表交互 (缩放、查看详情)",
+      "内容折叠/展开",
+      "夜间模式切换",
+      "多语言支持 (可选)"
+    ],
+    "technical_stack": {
+      "framework": "React (推荐) 或 Vue.js",
+      "styling": "Tailwind CSS 或 Material-UI",
+      "state_management": "Redux 或 Context API",
+      "charts": "Chart.js 或 Recharts",
+      "diagrams": "Mermaid.js 或类似库"
+    }
+  },
+  "shared_context": [
+    "/dev-team/shared/docs/tech_stack.md",
+    "/dev-team/shared/output/architect/paper_learning_website_architecture.md",
+    "/dev-team/shared/output/be/paper_learning_website_backend/"
+  ],
+  "priority": "high",
+  "deadline": "2026-03-07T12:00:00Z",
+  "output_location": "/dev-team/shared/output/fe/paper_learning_website_frontend/"
+}

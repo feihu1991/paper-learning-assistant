@@ -1,0 +1,35 @@
+{
+  "task_id": "002",
+  "type": "frontend",
+  "objective": "创建论文学习助手前端界面",
+  "specs": {
+    "pages": [
+      "首页 - 论文搜索输入",
+      "搜索结果页 - 显示论文列表",
+      "论文详情页 - 显示论文解释和图片",
+      "生成页面 - 显示生成进度和结果"
+    ],
+    "components": [
+      "搜索框组件",
+      "论文卡片组件",
+      "解释展示组件",
+      "图片展示组件",
+      "加载状态组件"
+    ],
+    "features": [
+      "响应式设计",
+      "实时搜索建议",
+      "分步解释展示",
+      "图片画廊",
+      "暗色/亮色主题"
+    ]
+  },
+  "shared_context": ["/dev-team/shared/docs/api_style.md"],
+  "requirements": [
+    "使用React或Vue.js框架",
+    "使用Tailwind CSS或类似UI框架",
+    "集成图表库用于可视化",
+    "支持移动端和桌面端"
+  ],
+  "design_reference": "Minimax网站风格（暗色、专业）"
+}

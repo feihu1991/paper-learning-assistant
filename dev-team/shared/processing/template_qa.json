@@ -1,0 +1,45 @@
+{
+  "task_id": "qa_template",
+  "type": "qa",
+  "objective": "质量保证测试任务模板",
+  "description": "用于创建 QA Agent 测试任务的模板文件",
+  "specs": {
+    "test_types": ["unit", "integration", "e2e", "performance", "security"],
+    "code_path": "/dev-team/shared/output/{be|fe}/{module_name}/",
+    "test_framework": "jest|mocha|cypress|playwright",
+    "coverage_threshold": 80,
+    "performance_targets": {
+      "response_time": "200ms",
+      "concurrent_users": 1000,
+      "error_rate": "0.1%",
+      "throughput": "1000 req/s"
+    },
+    "quality_requirements": {
+      "eslint_errors": 0,
+      "eslint_warnings": 10,
+      "complexity_level": "medium",
+      "duplication_threshold": "5%"
+    },
+    "security_checks": ["sqli", "xss", "injection", "auth_bypass"]
+  },
+  "shared_context": [
+    "/dev-team/shared/docs/qa_agent_config.md",
+    "/dev-team/shared/docs/test_guidelines.md",
+    "/dev-team/shared/docs/api_spec.md"
+  ],
+  "priority": "high|medium|low",
+  "deadline": "ISO 8601 时间格式",
+  "dependencies": ["be_001", "fe_001"],
+  "output_requirements": {
+    "reports": ["html", "json", "junit"],
+    "artifacts": ["coverage", "logs", "screenshots"],
+    "delivery_path": "/dev-team/shared/output/qa/{task_id}/"
+  },
+  "acceptance_criteria": [
+    "所有测试用例通过率 ≥ 95%",
+    "代码覆盖率 ≥ 指定阈值",
+    "性能指标符合要求",
+    "无 Critical/High 级别安全漏洞",
+    "代码质量检查通过"
+  ]
+}

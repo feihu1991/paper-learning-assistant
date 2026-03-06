@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>安装指南 - OpenClaw</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+</head>
+<body>
+    <header class="header">
+        <nav class="nav">
+            <div class="logo">
+                <span class="logo-icon">⚡</span>
+                <span class="logo-text">OpenClaw</span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">首页</a></li>
+                <li><a href="install.html" class="active">安装指南</a></li>
+                <li><a href="config.html">配置教程</a></li>
+                <li><a href="faq.html">常见问题</a></li>
+            </ul>
+            <button class="mobile-menu-btn">☰</button>
+        </nav>
+    </header>
+
+    <div class="page-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-section">
+                <h4 class="sidebar-title">目录</h4>
+                <ul class="sidebar-nav">
+                    <li><a href="#requirements" class="sidebar-link active">环境要求</a></li>
+                    <li><a href="#macos-linux" class="sidebar-link">macOS/Linux</a></li>
+                    <li><a href="#windows" class="sidebar-link">Windows</a></li>
+                    <li><a href="#onboard" class="sidebar-link">引导配置</a></li>
+                    <li><a href="#verify" class="sidebar-link">验证安装</a></li>
+                </ul>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="page-content">
+            <h1 class="page-title">安装指南</h1>
+            <p class="page-desc">本文档将帮助您在各种操作系统上安装和配置 OpenClaw。</p>
+
+            <!-- Requirements -->
+            <section id="requirements" class="content-section">
+                <h2>环境要求</h2>
+                <div class="info-box info">
+                    <strong>📋 系统要求</strong>
+                    <ul>
+                        <li><strong>Node.js:</strong> 版本 22.0 或更高</li>
+                        <li><strong>操作系统:</strong> macOS, Linux, Windows</li>
+                        <li><strong>网络:</strong> 需要访问 openclaw.ai 下载安装脚本</li>
+                    </ul>
+                </div>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span>检查 Node.js 版本</span>
+                        <button class="copy-btn" data-code="node --version">复制</button>
+                    </div>
+                    <pre><code class="language-bash">node --version</code></pre>
+                </div>
+                <p>如果未安装 Node.js 22+，请访问 <a href="https://nodejs.org" target="_blank">nodejs.org</a> 下载安装。</p>
+            </section>
+
+            <!-- macOS / Linux -->
+            <section id="macos-linux" class="content-section">
+                <h2>macOS / Linux 安装</h2>
+                
+                <div class="info-box tip">
+                    <strong>💡 推荐：</strong> 使用官方安装脚本自动完成安装和配置。
+                </div>
+
+                <h3>一键安装</h3>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span>终端</span>
+                        <button class="copy-btn" data-code="curl -fsSL https://openclaw.ai/install.sh | bash">复制</button>
+                    </div>
+                    <pre><code class="language-bash">curl -fsSL https://openclaw.ai/install.sh | bash</code></pre>
+                </div>
+
+                <h3>安装过程说明</h3>
+                <p>安装脚本会执行以下操作：</p>
+                <ol>
+                    <li>下载 OpenClaw CLI 工具</li>
+                    <li>安装到系统路径</li>
+                    <li>创建配置目录 <code>~/.openclaw/</code></li>
+                    <li>配置环境变量</li>
+                </ol>
+
+                <div class="info-box success">
+                    <strong>✅ 安装完成！</strong> 接下来运行引导配置。
+                </div>
+            </section>
+
+            <!-- Windows -->
+            <section id="windows" class="content-section">
+                <h2>Windows 安装</h2>
+                
+                <div class="info-box warning">
+                    <strong>⚠️ 要求：</strong> Windows 10/11，需要管理员权限的 PowerShell。
+                </div>
+
+                <h3>PowerShell 安装</h3>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span>PowerShell (管理员)</span>
+                        <button class="copy-btn" data-code="iwr -useb https://openclaw.ai/install.ps1 | iex">复制</button>
+                    </div>
+                    <pre><code class="language-bash">iwr -useb https://openclaw.ai/install.ps1 | iex</code></pre>
+                </div>
+
+                <h3>手动安装（备选）</h3>
+                <p>如果自动安装失败，可以手动配置：</p>
+                <ol>
+                    <li>确保已安装 Node.js 22+</li>
+                    <li>全局安装 OpenClaw：
+                        <div class="code-block">
+                            <button class="copy-btn" data-code="npm install -g @openclaw/cli">复制</button>
+                            <pre><code class="language-bash">npm install -g @openclaw/cli</code></pre>
+                        </div>
+                    </li>
+                    <li>创建配置目录：
+                        <div class="code-block">
+                            <button class="copy-btn" data-code="mkdir $env:USERPROFILE\.openclaw">复制</button>
+                            <pre><code class="language-bash">mkdir $env:USERPROFILE\.openclaw</code></pre>
+                        </div>
+                    </li>
+                </ol>
+            </section>
+
+            <!-- Onboard -->
+            <section id="onboard" class="content-section">
+                <h2>引导配置</h2>
+                <p>安装完成后，需要运行引导程序来配置守护进程和渠道连接。</p>
+
+                <h3>运行引导程序</h3>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span>终端</span>
+                        <button class="copy-btn" data-code="openclaw onboard --install-daemon">复制</button>
+                    </div>
+                    <pre><code class="language-bash">openclaw onboard --install-daemon</code></pre>
+                </div>
+
+                <h3>引导程序功能</h3>
+                <ul>
+                    <li><strong>安装守护进程：</strong> 设置后台服务自动启动</li>
+                    <li><strong>配置渠道：</strong> 连接 WhatsApp、Telegram、Discord 等</li>
+                    <li><strong>设置代理：</strong> 配置 AI 模型提供商的 API Key</li>
+                    <li><strong>创建工作区：</strong> 初始化第一个工作空间</li>
+                </ul>
+
+                <div class="info-box tip">
+                    <strong>💡 提示：</strong> 引导程序会交互式提示您完成配置，按照提示操作即可。
+                </div>
+            </section>
+
+            <!-- Verify -->
+            <section id="verify" class="content-section">
+                <h2>验证安装</h2>
+                <p>安装完成后，请按以下步骤验证：</p>
+                
+                <h3>检查 Gateway 状态</h3>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span>检查状态</span>
+                        <button class="copy-btn" data-code="openclaw gateway status">复制</button>
+                    </div>
+                    <pre><code class="language-bash">openclaw gateway status</code></pre>
+                </div>
+
+                <h3>启动 Gateway</h3>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span>启动服务</span>
+                        <button class="copy-btn" data-code="openclaw gateway start">复制</button>
+                    </div>
+                    <pre><code class="language-bash">openclaw gateway start</code></pre>
+                </div>
+
+                <h3>打开 Dashboard</h3>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span>打开控制台</span>
+                        <button class="copy-btn" data-code="openclaw dashboard">复制</button>
+                    </div>
+                    <pre><code class="language-bash">openclaw dashboard</code></pre>
+                </div>
+
+                <div class="info-box success">
+                    <strong>✅ 恭喜！</strong> 如果服务正常启动，说明安装成功。浏览器会自动打开控制台界面。接下来请阅读 <a href="config.html">配置教程</a>。
+                </div>
+            </section>
+
+            <!-- Uninstall -->
+            <section class="content-section">
+                <h2>卸载 OpenClaw</h2>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span>卸载</span>
+                        <button class="copy-btn" data-code="openclaw onboard --uninstall">复制</button>
+                    </div>
+                    <pre><code class="language-bash">openclaw onboard --uninstall</code></pre>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <span class="logo-icon">⚡</span>
+                <span>OpenClaw</span>
+            </div>
+            <div class="footer-links">
+                <a href="install.html">文档</a>
+                <a href="faq.html">FAQ</a>
+                <a href="https://github.com/openclaw">GitHub</a>
+            </div>
+            <p class="footer-copyright">© 2024 OpenClaw. MIT License.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

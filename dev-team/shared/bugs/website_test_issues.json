@@ -1,0 +1,7 @@
+[
+  {
+    "type": "performance",
+    "severity": "low",
+    "description": "页面加载时间略长，建议优化"
+  }
+]

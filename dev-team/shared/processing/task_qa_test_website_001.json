@@ -1,0 +1,75 @@
+{
+  "task_id": "qa_test_website_001",
+  "type": "qa",
+  "objective": "自动测试论文学习助手网站的功能、兼容性和性能",
+  "specs": {
+    "测试范围": [
+      "功能测试",
+      "兼容性测试", 
+      "性能测试",
+      "安全性测试",
+      "用户体验测试"
+    ],
+    "测试环境": [
+      "桌面端: Chrome, Firefox, Safari, Edge",
+      "移动端: iOS Safari, Android Chrome",
+      "响应式断点: 320px, 768px, 1024px, 1440px"
+    ],
+    "测试用例": {
+      "功能测试": [
+        "网站可访问性测试",
+        "搜索功能测试",
+        "页面导航测试",
+        "表单交互测试",
+        "错误处理测试"
+      ],
+      "兼容性测试": [
+        "跨浏览器兼容性",
+        "跨设备兼容性",
+        "屏幕尺寸适配",
+        "JavaScript兼容性",
+        "CSS兼容性"
+      ],
+      "性能测试": [
+        "页面加载速度",
+        "首次内容绘制(FCP)",
+        "最大内容绘制(LCP)",
+        "累积布局偏移(CLS)",
+        "交互响应时间"
+      ],
+      "安全性测试": [
+        "HTTPS强制启用",
+        "安全头检查",
+        "XSS防护检查",
+        "CSRF防护检查"
+      ]
+    },
+    "测试工具": [
+      "Jest (单元测试)",
+      "Cypress (端到端测试)",
+      "Lighthouse (性能测试)",
+      "BrowserStack (兼容性测试)",
+      "OWASP ZAP (安全测试)"
+    ],
+    "测试目标": {
+      "性能指标": "LCP < 2.5s, FID < 100ms, CLS < 0.1",
+      "兼容性目标": "支持Chrome 80+, Firefox 75+, Safari 13+",
+      "功能覆盖率": "核心功能100%测试覆盖"
+    }
+  },
+  "shared_context": [
+    "/dev-team/shared/docs/api_style.md",
+    "/dev-team/shared/output/architect/paper_learning_website_architecture.md",
+    "https://feihu1991.github.io/paper-learning-assistant/",
+    "https://github.com/feihu1991/paper-learning-assistant"
+  ],
+  "priority": "high",
+  "deadline": "2026-03-06T12:00:00Z",
+  "output_requirements": {
+    "测试报告": "/dev-team/shared/reports/qa_test_report_001.md",
+    "测试日志": "/dev-team/shared/output/qa/website_test_logs.json",
+    "性能数据": "/dev-team/shared/output/qa/performance_metrics.json",
+    "问题清单": "/dev-team/shared/bugs/website_issues_001.json"
+  },
+  "notes": "这是论文学习助手网站的首次全面测试。重点测试网站的核心功能、跨平台兼容性和性能指标。测试结果将用于指导后续的优化和开发工作。"
+}

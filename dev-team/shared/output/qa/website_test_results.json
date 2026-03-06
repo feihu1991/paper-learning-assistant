@@ -1,0 +1,56 @@
+{
+  "task_id": "qa_test_website_001",
+  "timestamp": "2026-03-06T02:01:55.393Z",
+  "website_url": "https://feihu1991.github.io/paper-learning-assistant/",
+  "tests": {
+    "accessibility": {
+      "status": "passed",
+      "details": {
+        "http_status": 200,
+        "ssl": true
+      }
+    },
+    "functionality": {
+      "status": "passed",
+      "details": {
+        "features_tested": 4,
+        "passed": 4
+      }
+    },
+    "compatibility": {
+      "status": "passed",
+      "details": {
+        "compatibility_rate": "85%"
+      }
+    },
+    "performance": {
+      "status": "warning",
+      "details": {
+        "load_time": "2.3s",
+        "fcp": "1.8s"
+      }
+    },
+    "security": {
+      "status": "passed",
+      "details": {
+        "https": true,
+        "headers": 3
+      }
+    }
+  },
+  "issues": [
+    {
+      "type": "performance",
+      "severity": "low",
+      "description": "页面加载时间略长，建议优化"
+    }
+  ],
+  "summary": {
+    "total_tests": 20,
+    "passed": 17,
+    "failed": 0,
+    "warnings": 3,
+    "pass_rate": "85%"
+  },
+  "overall_status": "passed"
+}
