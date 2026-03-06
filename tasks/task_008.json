@@ -1,0 +1,16 @@
+{
+  "task_id": "008",
+  "type": "pm",
+  "objective": "规划并启动v1.1版本开发",
+  "specs": {
+    "version": "1.1",
+    "features": [
+      {"name": "用户认证", "priority": "high", "desc": "JWT登录注册"},
+      {"name": "论文收藏", "priority": "high", "desc": "收藏喜欢的论文"},
+      {"name": "学习进度", "priority": "medium", "desc": "追踪学习进度"},
+      {"name": "导出报告", "priority": "medium", "desc": "PDF/Markdown导出"}
+    ]
+  },
+  "status": "pending",
+  "created_at": "2026-03-06T15:40:00"
+}

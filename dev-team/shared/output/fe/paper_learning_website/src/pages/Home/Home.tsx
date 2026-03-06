@@ -1,6 +1,6 @@
 import { useState } from 'react'
-import SearchBar from '../components/SearchBar/SearchBar'
-import PaperCard from '../components/PaperCard/PaperCard'
+import SearchBar from '../../components/SearchBar/SearchBar'
+import PaperCard from '../../components/PaperCard/PaperCard'
 import axios from 'axios'
 import './Home.css'
 

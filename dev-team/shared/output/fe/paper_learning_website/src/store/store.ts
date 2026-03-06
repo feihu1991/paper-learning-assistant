@@ -1,13 +1,13 @@
 import { configureStore } from '@reduxjs/toolkit'
-import searchReducer from './slices/searchSlice'
 import userReducer from './slices/userSlice'
-import paperReducer from './slices/paperSlice'
+import favoritesReducer from './slices/favoritesSlice'
+import progressReducer from './slices/progressSlice'
 
 export const store = configureStore({
   reducer: {
-    search: searchReducer,
     user: userReducer,
-    paper: paperReducer,
+    favorites: favoritesReducer,
+    progress: progressReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
