@@ -1,117 +1,88 @@
-import { useState } from 'react'
-import SearchBar from '../components/SearchBar/SearchBar'
-import PaperCard from '../components/PaperCard/PaperCard'
-import './Home.css'
+import React, { useState } from 'react';
 
-const Home = () => {
-  const [searchResults, setSearchResults] = useState([])
-  const [loading, setLoading] = useState(false)
-  
-  const handleSearch = async (query: string) => {
-    setLoading(true)
-    try {
-      // 这里调用搜索API
-      // const results = await searchPapers(query)
-      // setSearchResults(results)
-      
-      // 模拟数据
-      setTimeout(() => {
-        setSearchResults([
-          {
-            id: 'arxiv:2301.12345',
-            title: 'A Survey of Large Language Models',
-            authors: ['John Doe', 'Jane Smith'],
-            abstract: 'This paper provides a comprehensive survey...',
-            source: 'arxiv',
-            published_date: '2023-01-01'
-          },
-          {
-            id: 'arxiv:2302.12345',
-            title: 'Advanced Techniques in Natural Language Processing',
-            authors: ['Alice Johnson'],
-            abstract: 'This paper explores advanced NLP techniques...',
-            source: 'arxiv',
-            published_date: '2023-02-01'
-          }
-        ])
-        setLoading(false)
-      }, 1000)
-    } catch (error) {
-      console.error('搜索错误:', error)
-      setLoading(false)
+const Home: React.FC = () => {
+  const [query, setQuery] = useState('');
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    console.log('Searching for:', query);
+  };
+
+  const papers = [
+    {
+      id: '1',
+      title: 'Attention Is All You Need',
+      authors: ['Vaswani, A.', 'Shazeer, N.', 'Parmar, N.', 'Uszkoreit, J.'],
+      abstract: 'The dominant sequence transduction models are based on complex recurrent or convolutional neural networks...',
+      source: 'arXiv',
+      published_date: '2017-06-12'
+    },
+    {
+      id: '2',
+      title: 'BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding',
+      authors: ['Devlin, J.', 'Chang, M.', 'Lee, K.', 'Toutanova, K.'],
+      abstract: 'We introduce a new language representation model called BERT...',
+      source: 'arXiv',
+      published_date: '2018-10-11'
     }
-  }
-  
+  ];
+
   return (
-    <div className="home-container">
-      <div className="hero-section">
-        <h1 className="hero-title">论文学习助手</h1>
-        <p className="hero-subtitle">
-          输入论文名称，获取学习内容、解释和可视化图表
-        </p>
-        
-        <div className="search-section">
-          <SearchBar onSearch={handleSearch} />
-          <div className="search-tips">
-            <span className="tip">试试搜索: </span>
-            <button className="tip-button" onClick={() => handleSearch('large language models')}>
-              large language models
-            </button>
-            <button className="tip-button" onClick={() => handleSearch('machine learning')}>
-              machine learning
-            </button>
-            <button className="tip-button" onClick={() => handleSearch('deep learning')}>
-              deep learning
-            </button>
-          </div>
+    <div className="min-h-screen bg-gray-50">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div className="text-center mb-12">
+          <h1 className="text-4xl font-bold text-gray-900 mb-4">
+            Paper Learning Assistant
+          </h1>
+          <p className="text-lg text-gray-600">
+            Search, understand, and learn from academic papers with AI assistance
+          </p>
         </div>
-      </div>
-      
-      <div className="results-section">
-        {loading ? (
-          <div className="loading">搜索中...</div>
-        ) : searchResults.length > 0 ? (
-          <div className="results-grid">
-            {searchResults.map((paper) => (
-              <PaperCard key={paper.id} paper={paper} />
-            ))}
-          </div>
-        ) : (
-          <div className="empty-state">
-            <div className="empty-icon">📚</div>
-            <h3>开始搜索论文</h3>
-            <p>输入论文名称或关键词，获取学习内容和解释</p>
-          </div>
-        )}
-      </div>
-      
-      <div className="features-section">
-        <h2 className="features-title">核心功能</h2>
-        <div className="features-grid">
-          <div className="feature-card">
-            <div className="feature-icon">🔍</div>
-            <h3>智能搜索</h3>
-            <p>支持arXiv、PubMed、IEEE等多源论文搜索</p>
-          </div>
-          <div className="feature-card">
-            <div className="feature-icon">🤖</div>
-            <h3>AI解释</h3>
-            <p>使用AI生成易于理解的论文解释和摘要</p>
-          </div>
-          <div className="feature-card">
-            <div className="feature-icon">📊</div>
-            <h3>可视化图表</h3>
-            <p>自动创建概念图、流程图等帮助理解</p>
-          </div>
-          <div className="feature-card">
-            <div className="feature-icon">🎯</div>
-            <h3>学习路径</h3>
-            <p>提供结构化的学习指导和进度跟踪</p>
-          </div>
+
+        <div className="max-w-3xl mx-auto mb-12">
+          <form onSubmit={handleSearch} className="flex gap-2">
+            <input
+              type="text"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="Search for papers (e.g., 'transformer models', 'machine learning')"
+              className="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            />
+            <button
+              type="submit"
+              className="px-6 py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+            >
+              Search
+            </button>
+          </form>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {papers.map((paper) => (
+            <div key={paper.id} className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow">
+              <h3 className="text-xl font-semibold text-gray-900 mb-2">{paper.title}</h3>
+              <p className="text-sm text-gray-600 mb-3">
+                {paper.authors.join(', ')}
+              </p>
+              <p className="text-gray-700 mb-4 line-clamp-3">{paper.abstract}</p>
+              <div className="flex justify-between items-center text-sm text-gray-500">
+                <span>{paper.source}</span>
+                <span>{paper.published_date}</span>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div className="mt-12 text-center">
+          <p className="text-gray-600">
+            This is a demo of the Paper Learning Assistant website.
+            <br />
+            Full features including AI-powered explanations, visualizations, and user profiles are coming soon!
+          </p>
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Home
+export default Home;
