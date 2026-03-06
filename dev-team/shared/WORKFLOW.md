@@ -45,12 +45,43 @@
 - PM 在 `/dev-team/shared/tasks/` 创建任务文件 (JSON格式)
 - 任务类型: `backend` | `frontend` | `qa` | `devops` | `architect`
 
-### 3. 任务处理
+### 3. 构建环境配置 (重要!)
+每次BE/FE开发前，必须确保构建环境可用：
+
+**Java项目**:
+1. 检查Java环境 (`java -version`)
+2. 检查Maven/Gradle
+3. 如果缺失，自动下载配置Maven/Gradle
+4. 运行 `mvn clean package` 验证构建
+5. 启动应用验证
+
+**Node.js项目**:
+1. 检查Node.js环境 (`node -v`)
+2. 检查npm (`npm -v`)
+3. 运行 `npm install` 安装依赖
+4. 运行 `npm run build` 验证构建
+5. 启动应用验证
+
+**Python项目**:
+1. 检查Python环境
+2. 检查pip/venv
+3. 安装依赖
+4. 验证运行
+
+如果自动配置失败，标记任务需要手动处理。
+
+### 4. 任务处理
 - BE/FE/QA/DevOps/Architect 自动监控任务队列
 - 处理中的任务移动到 `/dev-team/shared/processing/`
 - 产出保存到 `/dev-team/shared/output/{role}/`
 
-### 4. 质量检查
+### 4. 构建环境配置
+- **自动检测所需环境**: Java (Maven/Gradle), Node.js, Python等
+- **自动安装依赖**: 如果环境缺失，自动下载配置
+- **如果自动配置失败**: 标记任务需要手动配置，通知PM
+- **验证构建**: 确保代码可以编译/运行
+
+### 5. 质量检查
 - QA Agent 自动检查产出质量
 - 生成测试报告
 - 如有问题，提交 Bug 到 `/dev-team/shared/bugs/`
