@@ -235,6 +235,127 @@ app.get('/health', (req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 
+// ========== 用户认证 API ==========
+const users = []; // 内存存储
+const jwt = require('jsonwebtoken');
+const JWT_SECRET = 'paper-learning-secret-key-2026';
+
+// 用户注册
+app.post('/api/auth/register', (req, res) => {
+  const { username, password, email } = req.body;
+  
+  if (users.find(u => u.username === username)) {
+    return res.json({ error: '用户名已存在' });
+  }
+  
+  const user = {
+    id: users.length + 1,
+    username,
+    password, // 简化：实际应该加密
+    email,
+    createdAt: new Date().toISOString()
+  };
+  
+  users.push(user);
+  
+  const token = jwt.sign({ id: user.id, username: user.username }, JWT_SECRET, { expiresIn: '7d' });
+  res.json({ token, user: { id: user.id, username: user.username, email: user.email } });
+});
+
+// 用户登录
+app.post('/api/auth/login', (req, res) => {
+  const { username, password } = req.body;
+  
+  const user = users.find(u => u.username === username && u.password === password);
+  
+  if (!user) {
+    return res.json({ error: '用户名或密码错误' });
+  }
+  
+  const token = jwt.sign({ id: user.id, username: user.username }, JWT_SECRET, { expiresIn: '7d' });
+  res.json({ token, user: { id: user.id, username: user.username, email: user.email } });
+});
+
+// ========== 收藏 API ==========
+const favorites = []; // 内存存储
+
+// 获取收藏列表
+app.get('/api/favorites', (req, res) => {
+  const authHeader = req.headers.authorization;
+  if (!authHeader) {
+    return res.json([]);
+  }
+  
+  try {
+    const token = authHeader.replace('Bearer ', '');
+    const decoded = jwt.verify(token, JWT_SECRET);
+    const userFavorites = favorites.filter(f => f.userId === decoded.id);
+    res.json(userFavorites);
+  } catch (e) {
+    res.json([]);
+  }
+});
+
+// 添加收藏
+app.post('/api/favorites/add', (req, res) => {
+  const { paperId, title, authors, abstract } = req.body;
+  const authHeader = req.headers.authorization;
+  
+  if (!authHeader) {
+    return res.json({ error: '请先登录' });
+  }
+  
+  try {
+    const token = authHeader.replace('Bearer ', '');
+    const decoded = jwt.verify(token, JWT_SECRET);
+    
+    // 检查是否已收藏
+    if (favorites.find(f => f.userId === decoded.id && f.paperId === paperId)) {
+      return res.json({ error: '已经收藏过了' });
+    }
+    
+    const favorite = {
+      id: favorites.length + 1,
+      userId: decoded.id,
+      paperId,
+      title,
+      authors: authors || [],
+      abstract: abstract || '',
+      createdAt: new Date().toISOString()
+    };
+    
+    favorites.push(favorite);
+    res.json(favorite);
+  } catch (e) {
+    res.json({ error: '无效的token' });
+  }
+});
+
+// 删除收藏
+app.delete('/api/favorites/:id', (req, res) => {
+  const { id } = req.params;
+  const authHeader = req.headers.authorization;
+  
+  if (!authHeader) {
+    return res.json({ error: '请先登录' });
+  }
+  
+  try {
+    const token = authHeader.replace('Bearer ', '');
+    const decoded = jwt.verify(token, JWT_SECRET);
+    
+    const index = favorites.findIndex(f => f.id === parseInt(id) && f.userId === decoded.id);
+    if (index === -1) {
+      return res.json({ error: '收藏不存在' });
+    }
+    
+    favorites.splice(index, 1);
+    res.json({ success: true });
+  } catch (e) {
+    res.json({ error: '无效的token' });
+  }
+});
+
 app.listen(PORT, () => {
   console.log(`🚀 后端服务已启动: http://localhost:${PORT}`);
 });
