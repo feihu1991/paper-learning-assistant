@@ -87,3 +87,35 @@ export interface ExportReportResponse {
   download_url: string
   filename: string
 }
+
+// 笔记相关类型
+export interface Note {
+  id: string
+  paper_id: string
+  content: string
+  created_at: string
+  updated_at: string
+}
+
+export interface CreateNoteRequest {
+  paper_id: string
+  content: string
+}
+
+export interface UpdateNoteRequest {
+  content: string
+}
+
+// 推荐论文相关类型
+export interface Recommendation {
+  id: string
+  title: string
+  authors: string[]
+  abstract: string
+  source: string
+  published_date: string
+  pdf_url?: string
+  categories?: string[]
+  similarity_score?: number
+  reason?: string
+}

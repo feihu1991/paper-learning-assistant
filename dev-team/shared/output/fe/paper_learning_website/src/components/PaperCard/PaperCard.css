@@ -65,6 +65,34 @@
   gap: 0.75rem;
 }
 
+.paper-score {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: linear-gradient(135deg, #fef3c7, #fde68a);
+  color: #d97706;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+  margin-bottom: 8px;
+}
+
+.score-icon {
+  color: #f59e0b;
+}
+
+.paper-reason {
+  color: #6b7280;
+  font-size: 13px;
+  font-style: italic;
+  margin-bottom: 12px;
+  padding: 8px 12px;
+  background: #f9fafb;
+  border-radius: 6px;
+  border-left: 3px solid #667eea;
+}
+
 .action-btn {
   display: inline-flex;
   align-items: center;

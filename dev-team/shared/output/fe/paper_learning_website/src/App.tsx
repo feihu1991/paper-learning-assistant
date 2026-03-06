@@ -8,6 +8,7 @@ import UserProfile from './pages/UserProfile/UserProfile'
 import Auth from './pages/Auth/Auth'
 import Favorites from './pages/Favorites/Favorites'
 import Progress from './pages/Progress/Progress'
+import Recommendations from './pages/Recommendations/Recommendations'
 import './App.css'
 
 function App() {
@@ -22,6 +23,7 @@ function App() {
             <Route path="/auth" element={<Auth />} />
             <Route path="/favorites" element={<Favorites />} />
             <Route path="/progress" element={<Progress />} />
+            <Route path="/recommendations" element={<Recommendations />} />
           </Routes>
         </MainLayout>
       </Router>

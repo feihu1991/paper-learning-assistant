@@ -55,6 +55,12 @@ const MainLayout = ({ children }: MainLayoutProps) => {
                 >
                   学习进度
                 </Link>
+                <Link 
+                  to="/recommendations" 
+                  className={`nav-link ${isActive('/recommendations') ? 'active' : ''}`}
+                >
+                  推荐论文
+                </Link>
               </>
             )}
           </nav>
@@ -124,6 +130,13 @@ const MainLayout = ({ children }: MainLayoutProps) => {
                   onClick={() => setIsMenuOpen(false)}
                 >
                   学习进度
+                </Link>
+                <Link 
+                  to="/recommendations" 
+                  className={`nav-link ${isActive('/recommendations') ? 'active' : ''}`}
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  推荐论文
                 </Link>
                 <button onClick={handleLogout} className="nav-link btn-logout">
                   登出

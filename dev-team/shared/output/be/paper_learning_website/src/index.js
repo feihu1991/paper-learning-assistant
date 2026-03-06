@@ -464,6 +464,256 @@ app.put('/api/user/profile', (req, res) => {
   }
 });
 
+// ========== 学习笔记 API (v1.3) ==========
+const notes = []; // 内存存储
+
+// 添加笔记 - POST /api/notes/add
+app.post('/api/notes/add', (req, res) => {
+  const { paperId, paperTitle, content, tags } = req.body;
+  const authHeader = req.headers.authorization;
+  
+  if (!authHeader) {
+    return res.json({ error: '请先登录' });
+  }
+  
+  try {
+    const token = authHeader.replace('Bearer ', '');
+    const decoded = jwt.verify(token, JWT_SECRET);
+    
+    const note = {
+      id: notes.length + 1,
+      userId: decoded.id,
+      paperId,
+      paperTitle: paperTitle || '',
+      content,
+      tags: tags || [],
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    };
+    
+    notes.push(note);
+    res.json(note);
+  } catch (e) {
+    res.json({ error: '无效的token' });
+  }
+});
+
+// 获取笔记 - GET /api/notes?paperId=xxx
+app.get('/api/notes', (req, res) => {
+  const { paperId } = req.query;
+  const authHeader = req.headers.authorization;
+  
+  if (!authHeader) {
+    return res.json({ error: '请先登录' });
+  }
+  
+  try {
+    const token = authHeader.replace('Bearer ', '');
+    const decoded = jwt.verify(token, JWT_SECRET);
+    
+    let userNotes = notes.filter(n => n.userId === decoded.id);
+    
+    // 如果指定了paperId，则过滤
+    if (paperId) {
+      userNotes = userNotes.filter(n => n.paperId === paperId);
+    }
+    
+    res.json(userNotes);
+  } catch (e) {
+    res.json({ error: '无效的token' });
+  }
+});
+
+// 更新笔记 - PUT /api/notes/:id
+app.put('/api/notes/:id', (req, res) => {
+  const { id } = req.params;
+  const { content, tags } = req.body;
+  const authHeader = req.headers.authorization;
+  
+  if (!authHeader) {
+    return res.json({ error: '请先登录' });
+  }
+  
+  try {
+    const token = authHeader.replace('Bearer ', '');
+    const decoded = jwt.verify(token, JWT_SECRET);
+    
+    const note = notes.find(n => n.id === parseInt(id) && n.userId === decoded.id);
+    
+    if (!note) {
+      return res.json({ error: '笔记不存在' });
+    }
+    
+    if (content !== undefined) note.content = content;
+    if (tags !== undefined) note.tags = tags;
+    note.updatedAt = new Date().toISOString();
+    
+    res.json(note);
+  } catch (e) {
+    res.json({ error: '无效的token' });
+  }
+});
+
+// 删除笔记 - DELETE /api/notes/:id
+app.delete('/api/notes/:id', (req, res) => {
+  const { id } = req.params;
+  const authHeader = req.headers.authorization;
+  
+  if (!authHeader) {
+    return res.json({ error: '请先登录' });
+  }
+  
+  try {
+    const token = authHeader.replace('Bearer ', '');
+    const decoded = jwt.verify(token, JWT_SECRET);
+    
+    const index = notes.findIndex(n => n.id === parseInt(id) && n.userId === decoded.id);
+    
+    if (index === -1) {
+      return res.json({ error: '笔记不存在' });
+    }
+    
+    notes.splice(index, 1);
+    res.json({ success: true });
+  } catch (e) {
+    res.json({ error: '无效的token' });
+  }
+});
+
+// ========== 论文推荐 API (v1.3) ==========
+// GET /api/recommendations - 基于用户学习历史推荐论文
+
+// 模拟论文数据库（用于推荐）
+const paperDatabase = [
+  { id: 'arxiv:1706.03762', title: 'Attention Is All You Need', category: 'NLP', tags: ['transformer', 'attention'] },
+  { id: 'arxiv:1810.04805', title: 'BERT: Pre-training of Deep Bidirectional Transformers', category: 'NLP', tags: ['BERT', 'transformer'] },
+  { id: 'arxiv:1907.11692', title: 'RoBERTa: A Robustly Optimized BERT Pretraining Approach', category: 'NLP', tags: ['BERT', 'RoBERTa'] },
+  { id: 'arxiv:1409.0473', title: 'Neural Machine Translation by Jointly Learning to Align and Translate', category: 'NLP', tags: ['seq2seq', 'attention'] },
+  { id: 'arxiv:1508.04025', title: 'Effective Approaches to Attention-based Neural Machine Translation', category: 'NLP', tags: ['NMT', 'attention'] },
+  { id: 'arxiv:1712.05884', title: 'A Neural Probabilistic Language Model', category: 'NLP', tags: ['language-model', 'embedding'] },
+  { id: 'arxiv:1802.05365', title: 'DCN+: Mixed Objective and Deep Residual Coattention for Question Answering', category: 'NLP', tags: ['QA', 'attention'] },
+  { id: 'arxiv:1801.01290', title: 'Ask the Right Questions: Active Question Reformulation with Reinforcement Learning', category: 'NLP', tags: ['QA', 'RL'] },
+  { id: 'arxiv:1706.03741', title: 'Layer Normalization', category: 'Deep Learning', tags: ['normalization', 'transformer'] },
+  { id: 'arxiv:1607.06450', title: 'Layer Normalization', category: 'Deep Learning', tags: ['normalization', 'training'] },
+  { id: 'arxiv:1512.03385', title: 'Deep Residual Learning for Image Recognition', category: 'CV', tags: ['ResNet', 'image'] },
+  { id: 'arxiv:1409.1556', title: 'Very Deep Convolutional Networks for Large-Scale Image Recognition', category: 'CV', tags: ['VGG', 'image'] },
+  { id: 'arxiv:1611.05431', title: 'Inception-v4, Inception-ResNet and the Impact of Residual Connections on Learning', category: 'CV', tags: ['Inception', 'residual'] },
+  { id: 'arxiv:1802.02611', title: 'Convolutional Neural Networks for Sentence Classification', category: 'NLP', tags: ['CNN', 'text-classification'] },
+  { id: 'arxiv:1412.6980', title: 'Adam: A Method for Stochastic Optimization', category: 'Deep Learning', tags: ['optimizer', 'Adam'] }
+];
+
+app.get('/api/recommendations', (req, res) => {
+  const authHeader = req.headers.authorization;
+  const { limit = 5 } = req.query;
+  
+  // 未登录用户返回热门论文
+  if (!authHeader) {
+    const popularPapers = paperDatabase.slice(0, parseInt(limit));
+    return res.json({
+      recommendations: popularPapers,
+      reason: '热门论文推荐'
+    });
+  }
+  
+  try {
+    const token = authHeader.replace('Bearer ', '');
+    const decoded = jwt.verify(token, JWT_SECRET);
+    
+    // 获取用户的学习进度
+    const userProgress = learningProgress.filter(p => p.userId === decoded.id);
+    
+    // 获取用户的笔记
+    const userNotes = notes.filter(n => n.userId === decoded.id);
+    
+    // 获取用户收藏的论文
+    const userFavorites = favorites.filter(f => f.userId === decoded.id);
+    
+    // 提取用户关注的论文类别和标签
+    const userInterests = new Set();
+    
+    // 从学习进度中提取
+    userProgress.forEach(p => {
+      const paper = paperDatabase.find(pd => pd.id === p.paperId);
+      if (paper) {
+        userInterests.add(paper.category);
+        paper.tags.forEach(tag => userInterests.add(tag));
+      }
+    });
+    
+    // 从笔记中提取
+    userNotes.forEach(n => {
+      const paper = paperDatabase.find(pd => pd.id === n.paperId);
+      if (paper) {
+        userInterests.add(paper.category);
+        paper.tags.forEach(tag => userInterests.add(tag));
+      }
+    });
+    
+    // 从收藏中提取
+    userFavorites.forEach(f => {
+      const paper = paperDatabase.find(pd => pd.id === f.paperId);
+      if (paper) {
+        userInterests.add(paper.category);
+        paper.tags.forEach(tag => userInterests.add(tag));
+      }
+    });
+    
+    // 基于用户兴趣过滤并排序
+    const userInterestArray = Array.from(userInterests);
+    
+    // 计算每篇论文的相关度分数
+    const scoredPapers = paperDatabase.map(paper => {
+      // 排除用户已学习/收藏/笔记的论文
+      const isLearned = userProgress.some(p => p.paperId === paper.id);
+      const isFavorited = userFavorites.some(f => f.paperId === paper.id);
+      const hasNote = userNotes.some(n => n.paperId === paper.id);
+      
+      if (isLearned || isFavorited || hasNote) {
+        return { ...paper, score: -1 };
+      }
+      
+      // 计算相关度分数
+      let score = 0;
+      if (userInterestArray.includes(paper.category)) {
+        score += 5;
+      }
+      paper.tags.forEach(tag => {
+        if (userInterestArray.includes(tag)) {
+          score += 3;
+        }
+      });
+      
+      return { ...paper, score };
+    });
+    
+    // 按分数排序，获取推荐
+    const recommendations = scoredPapers
+      .filter(p => p.score >= 0)
+      .sort((a, b) => b.score - a.score)
+      .slice(0, parseInt(limit));
+    
+    res.json({
+      recommendations,
+      reason: recommendations.length > 0 
+        ? `基于您学习的 ${userProgress.length} 篇论文、${userNotes.length} 条笔记和 ${userFavorites.length} 个收藏`
+        : '暂无学习历史，为您推荐热门论文',
+      userInterests: userInterestArray,
+      stats: {
+        learnedPapers: userProgress.length,
+        notesCount: userNotes.length,
+        favoritesCount: userFavorites.length
+      }
+    });
+  } catch (e) {
+    // token无效，返回热门论文
+    const popularPapers = paperDatabase.slice(0, parseInt(limit));
+    res.json({
+      recommendations: popularPapers,
+      reason: '热门论文推荐'
+    });
+  }
+});
+
 app.listen(PORT, () => {
   console.log(`🚀 后端服务已启动: http://localhost:${PORT}`);
 });

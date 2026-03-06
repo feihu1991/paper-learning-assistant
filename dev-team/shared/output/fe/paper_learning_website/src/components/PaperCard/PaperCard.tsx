@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { BookOpen, Heart } from 'lucide-react'
+import { BookOpen, Heart, Sparkles } from 'lucide-react'
 import './PaperCard.css'
 
 interface PaperCardProps {
@@ -10,10 +10,15 @@ interface PaperCardProps {
     abstract: string
     source: string
     published_date: string
+    pdf_url?: string
+    categories?: string[]
   }
+  showScore?: boolean
+  score?: number
+  reason?: string
 }
 
-const PaperCard = ({ paper }: PaperCardProps) => {
+const PaperCard = ({ paper, showScore, score, reason }: PaperCardProps) => {
   return (
     <div className="paper-card">
       <div className="paper-card-header">
@@ -22,6 +27,13 @@ const PaperCard = ({ paper }: PaperCardProps) => {
           {new Date(paper.published_date).toLocaleDateString('zh-CN')}
         </span>
       </div>
+      
+      {showScore && (
+        <div className="paper-score">
+          <Sparkles size={14} className="score-icon" />
+          <span className="score-value">{Math.round((score || 0) * 100)}% 匹配</span>
+        </div>
+      )}
       
       <Link to={`/paper/${paper.id}`} className="paper-title">
         {paper.title}
@@ -36,6 +48,10 @@ const PaperCard = ({ paper }: PaperCardProps) => {
           ? `${paper.abstract.substring(0, 200)}...`
           : paper.abstract}
       </p>
+
+      {reason && (
+        <p className="paper-reason">{reason}</p>
+      )}
       
       <div className="paper-card-actions">
         <Link to={`/paper/${paper.id}`} className="action-btn primary">

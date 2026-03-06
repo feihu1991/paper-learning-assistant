@@ -1,11 +1,13 @@
 import { useEffect, useState } from 'react'
 import { useParams, Link, useNavigate } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
-import { ArrowLeft, Heart, Share2, BookOpen, Loader2, CheckCircle, Circle, PlayCircle, Download, FileText } from 'lucide-react'
+import { ArrowLeft, Heart, Share2, BookOpen, Loader2, CheckCircle, Circle, PlayCircle, Download, FileText, Plus, Trash2, Edit2 } from 'lucide-react'
 import { RootState, AppDispatch } from '../../store/store'
 import { addFavorite, removeFavorite } from '../../store/slices/favoritesSlice'
 import { updateLearningProgress } from '../../store/slices/progressSlice'
 import { exportService } from '../../services/user'
+import { notesService } from '../../services/notes'
+import { Note } from '../../types'
 import axios from 'axios'
 import './PaperDetail.css'
 
@@ -38,6 +40,15 @@ const PaperDetail = () => {
   const [generatingSummary, setGeneratingSummary] = useState(false)
   const [exporting, setExporting] = useState(false)
   const [showExportMenu, setShowExportMenu] = useState(false)
+  
+  // Notes state
+  const [notes, setNotes] = useState<Note[]>([])
+  const [loadingNotes, setLoadingNotes] = useState(false)
+  const [showAddNote, setShowAddNote] = useState(false)
+  const [newNoteContent, setNewNoteContent] = useState('')
+  const [addingNote, setAddingNote] = useState(false)
+  const [editingNoteId, setEditingNoteId] = useState<string | null>(null)
+  const [editContent, setEditContent] = useState('')
 
   const paperProgress = progressList.find(p => p.paper_id === id)
 
@@ -76,6 +87,97 @@ const PaperDetail = () => {
       fetchPaper()
     }
   }, [id, favorites])
+
+  // Fetch notes
+  useEffect(() => {
+    const fetchNotes = async () => {
+      if (!id || !isAuthenticated) return
+      
+      setLoadingNotes(true)
+      try {
+        const data = await notesService.getNotes(id)
+        setNotes(data)
+      } catch (err) {
+        // Mock notes for demo
+        setNotes([])
+      } finally {
+        setLoadingNotes(false)
+      }
+    }
+
+    fetchNotes()
+  }, [id, isAuthenticated])
+
+  const handleAddNote = async () => {
+    if (!newNoteContent.trim() || !id) return
+    
+    setAddingNote(true)
+    try {
+      const note = await notesService.createNote({
+        paper_id: id,
+        content: newNoteContent.trim()
+      })
+      setNotes([note, ...notes])
+      setNewNoteContent('')
+      setShowAddNote(false)
+    } catch (err) {
+      // Mock add for demo
+      const mockNote: Note = {
+        id: `note-${Date.now()}`,
+        paper_id: id,
+        content: newNoteContent.trim(),
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
+      }
+      setNotes([mockNote, ...notes])
+      setNewNoteContent('')
+      setShowAddNote(false)
+    } finally {
+      setAddingNote(false)
+    }
+  }
+
+  const handleDeleteNote = async (noteId: string) => {
+    try {
+      await notesService.deleteNote(noteId)
+      setNotes(notes.filter(n => n.id !== noteId))
+    } catch (err) {
+      // Mock delete for demo
+      setNotes(notes.filter(n => n.id !== noteId))
+    }
+  }
+
+  const handleEditNote = (note: Note) => {
+    setEditingNoteId(note.id)
+    setEditContent(note.content)
+  }
+
+  const handleSaveEdit = async () => {
+    if (!editingNoteId || !editContent.trim()) return
+    
+    try {
+      const updated = await notesService.updateNote(editingNoteId, {
+        content: editContent.trim()
+      })
+      setNotes(notes.map(n => n.id === editingNoteId ? updated : n))
+      setEditingNoteId(null)
+      setEditContent('')
+    } catch (err) {
+      // Mock update for demo
+      setNotes(notes.map(n => 
+        n.id === editingNoteId 
+          ? { ...n, content: editContent.trim(), updated_at: new Date().toISOString() }
+          : n
+      ))
+      setEditingNoteId(null)
+      setEditContent('')
+    }
+  }
+
+  const handleCancelEdit = () => {
+    setEditingNoteId(null)
+    setEditContent('')
+  }
 
   const handleFavorite = () => {
     if (!isAuthenticated) {
@@ -323,6 +425,119 @@ const PaperDetail = () => {
                   />
                 </div>
                 <span className="progress-text">{paperProgress.progress}%</span>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Notes Section */}
+        {isAuthenticated && (
+          <div className="notes-section">
+            <div className="notes-header">
+              <h2>笔记</h2>
+              <button 
+                className="add-note-btn"
+                onClick={() => setShowAddNote(!showAddNote)}
+              >
+                <Plus size={18} />
+                添加笔记
+              </button>
+            </div>
+
+            {/* Add Note Form */}
+            {showAddNote && (
+              <div className="add-note-form">
+                <textarea
+                  value={newNoteContent}
+                  onChange={(e) => setNewNoteContent(e.target.value)}
+                  placeholder="写下你的笔记..."
+                  rows={4}
+                />
+                <div className="add-note-actions">
+                  <button 
+                    className="cancel-btn"
+                    onClick={() => {
+                      setShowAddNote(false)
+                      setNewNoteContent('')
+                    }}
+                  >
+                    取消
+                  </button>
+                  <button 
+                    className="save-note-btn"
+                    onClick={handleAddNote}
+                    disabled={addingNote || !newNoteContent.trim()}
+                  >
+                    {addingNote ? '保存中...' : '保存'}
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {/* Notes List */}
+            {loadingNotes ? (
+              <div className="notes-loading">
+                <Loader2 className="spin" size={20} />
+                <span>加载笔记...</span>
+              </div>
+            ) : notes.length === 0 ? (
+              <div className="notes-empty">
+                <p>暂无笔记，点击"添加笔记"开始记录</p>
+              </div>
+            ) : (
+              <div className="notes-list">
+                {notes.map((note) => (
+                  <div key={note.id} className="note-item">
+                    {editingNoteId === note.id ? (
+                      <div className="note-edit-form">
+                        <textarea
+                          value={editContent}
+                          onChange={(e) => setEditContent(e.target.value)}
+                          rows={4}
+                        />
+                        <div className="note-edit-actions">
+                          <button 
+                            className="cancel-btn"
+                            onClick={handleCancelEdit}
+                          >
+                            取消
+                          </button>
+                          <button 
+                            className="save-note-btn"
+                            onClick={handleSaveEdit}
+                          >
+                            保存
+                          </button>
+                        </div>
+                      </div>
+                    ) : (
+                      <>
+                        <div className="note-content">
+                          <p>{note.content}</p>
+                        </div>
+                        <div className="note-meta">
+                          <span className="note-date">
+                            {new Date(note.updated_at || note.created_at).toLocaleDateString('zh-CN')}
+                          </span>
+                          <div className="note-actions">
+                            <button 
+                              className="note-action-btn"
+                              onClick={() => handleEditNote(note)}
+                            >
+                              <Edit2 size={16} />
+                            </button>
+                            <button 
+                              className="note-action-btn delete"
+                              onClick={() => handleDeleteNote(note.id)}
+                            >
+                              <Trash2 size={16} />
+                            </button>
+                          </div>
+                        </div>
+                      </>
+                    )}
+                  </div>
+                ))}
               </div>
             )}
           </div>
