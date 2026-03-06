@@ -1,0 +1,19 @@
+{
+  "task_id": "010",
+  "type": "qa",
+  "objective": "v1.2功能测试用例评审和测试执行",
+  "specs": {
+    "version": "1.2",
+    "test_items": [
+      {"api": "/api/auth/register", "type": "功能", "用例": "新用户注册成功"},
+      {"api": "/api/auth/login", "type": "功能", "用例": "用户登录成功"},
+      {"api": "/api/progress/update", "type": "功能", "用例": "更新学习进度"},
+      {"api": "/api/progress", "type": "功能", "用例": "获取学习进度列表"},
+      {"api": "/api/user/profile", "type": "功能", "用例": "获取用户信息"},
+      {"api": "/api/user/profile", "type": "功能", "用例": "更新用户信息"},
+      {"api": "/api/papers/search", "type": "功能", "用例": "搜索论文"}
+    ]
+  },
+  "status": "pending",
+  "created_at": "2026-03-06T19:05:00"
+}
