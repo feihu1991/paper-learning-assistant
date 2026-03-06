@@ -6,6 +6,19 @@ import './Home.css'
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api'
 
+// 分类选项
+const CATEGORIES = [
+  { value: '', label: '全部分类' },
+  { value: 'cs.CL', label: 'cs.CL - Computation and Language' },
+  { value: 'cs.AI', label: 'cs.AI - Artificial Intelligence' },
+  { value: 'cs.LG', label: 'cs.LG - Machine Learning' },
+  { value: 'cs.CV', label: 'cs.CV - Computer Vision' },
+  { value: 'cs.NE', label: 'cs.NE - Neural and Evolutionary Computing' },
+  { value: 'stat.ML', label: 'stat.ML - Machine Learning' },
+  { value: 'physics.gen-ph', label: 'physics.gen-ph - General Physics' },
+  { value: 'math.OC', label: 'math.OC - Optimization and Control' }
+]
+
 interface Paper {
   id: string
   title: string
@@ -13,21 +26,46 @@ interface Paper {
   abstract: string
   source: string
   published_date: string
+  categories?: string[]
 }
 
 const Home = () => {
   const [searchResults, setSearchResults] = useState<Paper[]>([])
   const [loading, setLoading] = useState(false)
   
+  // 筛选状态
+  const [categoryFilter, setCategoryFilter] = useState('')
+  const [yearFilter, setYearFilter] = useState('')
+  
+  // 筛选论文
+  const filterPapers = (papers: Paper[]): Paper[] => {
+    return papers.filter(paper => {
+      // 分类筛选
+      if (categoryFilter && paper.categories) {
+        if (!paper.categories.includes(categoryFilter)) {
+          return false
+        }
+      }
+      // 年份筛选
+      if (yearFilter) {
+        const paperYear = new Date(paper.published_date).getFullYear().toString()
+        if (paperYear !== yearFilter) {
+          return false
+        }
+      }
+      return true
+    })
+  }
+
   const handleSearch = async (query: string) => {
     setLoading(true)
     try {
       // 调用真正的后端搜索API
       const response = await axios.post(`${API_BASE_URL}/papers/search`, { query })
-      setSearchResults(response.data || [])
+      const results = response.data || []
       
       // 如果API调用失败或返回空，使用fallback数据
-      if (!response.data || response.data.length === 0) {
+      if (!results || results.length === 0) {
         setSearchResults([
           {
             id: 'arxiv:2301.12345',
@@ -35,7 +73,8 @@ const Home = () => {
             authors: ['John Doe', 'Jane Smith'],
             abstract: 'This paper provides a comprehensive survey...',
             source: 'arxiv',
-            published_date: '2023-01-01'
+            published_date: '2023-01-01',
+            categories: ['cs.CL', 'cs.AI']
           },
           {
             id: 'arxiv:2302.12345',
@@ -43,9 +82,21 @@ const Home = () => {
             authors: ['Alice Johnson'],
             abstract: 'This paper explores advanced NLP techniques...',
             source: 'arxiv',
-            published_date: '2023-02-01'
+            published_date: '2023-02-15',
+            categories: ['cs.CL']
+          },
+          {
+            id: 'arxiv:2303.12345',
+            title: 'Deep Learning for Computer Vision',
+            authors: ['Bob Wilson', 'Carol White'],
+            abstract: 'This paper presents new techniques...',
+            source: 'arxiv',
+            published_date: '2022-06-10',
+            categories: ['cs.CV', 'cs.LG']
           }
         ])
+      } else {
+        setSearchResults(results)
       }
     } catch (error) {
       console.error('搜索错误:', error)
@@ -57,7 +108,8 @@ const Home = () => {
           authors: ['John Doe', 'Jane Smith'],
           abstract: 'This paper provides a comprehensive survey...',
           source: 'arxiv',
-          published_date: '2023-01-01'
+          published_date: '2023-01-01',
+          categories: ['cs.CL', 'cs.AI']
         }
       ])
     } finally {
@@ -75,6 +127,52 @@ const Home = () => {
         
         <div className="search-section">
           <SearchBar onSearch={handleSearch} />
+          
+          {/* 筛选器 */}
+          <div className="filter-section">
+            <div className="filter-group">
+              <label htmlFor="category-filter">分类:</label>
+              <select
+                id="category-filter"
+                value={categoryFilter}
+                onChange={(e) => setCategoryFilter(e.target.value)}
+                className="filter-select"
+              >
+                {CATEGORIES.map(cat => (
+                  <option key={cat.value} value={cat.value}>
+                    {cat.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+            
+            <div className="filter-group">
+              <label htmlFor="year-filter">年份:</label>
+              <input
+                id="year-filter"
+                type="number"
+                value={yearFilter}
+                onChange={(e) => setYearFilter(e.target.value)}
+                placeholder="例如: 2023"
+                className="filter-input"
+                min="1900"
+                max="2100"
+              />
+            </div>
+            
+            {(categoryFilter || yearFilter) && (
+              <button 
+                className="clear-filter-btn"
+                onClick={() => {
+                  setCategoryFilter('')
+                  setYearFilter('')
+                }}
+              >
+                清除筛选
+              </button>
+            )}
+          </div>
+          
           <div className="search-tips">
             <span className="tip">试试搜索: </span>
             <button className="tip-button" onClick={() => handleSearch('large language models')}>
@@ -95,7 +193,7 @@ const Home = () => {
           <div className="loading">搜索中...</div>
         ) : searchResults.length > 0 ? (
           <div className="results-grid">
-            {searchResults.map((paper) => (
+            {filterPapers(searchResults).map((paper) => (
               <PaperCard key={paper.id} paper={paper} />
             ))}
           </div>

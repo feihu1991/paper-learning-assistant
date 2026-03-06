@@ -1,0 +1,16 @@
+{
+  "task_id": "012",
+  "type": "architect",
+  "objective": "规划v1.4版本功能",
+  "specs": {
+    "version": "1.4",
+    "proposals": [
+      {"name": "导出报告", "priority": "high", "desc": "导出PDF/Markdown格式分析报告"},
+      {"name": "分享功能", "priority": "medium", "desc": "生成分享链接"},
+      {"name": "搜索筛选", "priority": "high", "desc": "按类别/年份筛选论文"},
+      {"name": "批量操作", "priority": "medium", "desc": "批量收藏/分析"}
+    ]
+  },
+  "status": "in_progress",
+  "created_at": "2026-03-06T19:15:00"
+}

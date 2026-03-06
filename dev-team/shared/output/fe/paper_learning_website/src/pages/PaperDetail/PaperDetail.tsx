@@ -316,6 +316,19 @@ const PaperDetail = () => {
             <Share2 size={20} />
             分享
           </button>
+          {/* 直接导出Markdown按钮 */}
+          <button 
+            className="action-btn export-markdown-btn"
+            onClick={() => handleExport('markdown')}
+            disabled={exporting}
+          >
+            {exporting ? (
+              <Loader2 size={20} className="spin" />
+            ) : (
+              <Download size={20} />
+            )}
+            导出Markdown
+          </button>
           <div className="export-dropdown">
             <button 
               className="action-btn export-btn"

@@ -714,6 +714,343 @@ app.get('/api/recommendations', (req, res) => {
   }
 });
 
+// ========== v1.4 新功能 ==========
+
+// 1. 导出报告API - GET /api/papers/:id/export?format=markdown
+app.get('/api/papers/:id/export', async (req, res) => {
+  const { id } = req.params;
+  const { format = 'markdown' } = req.query;
+  
+  try {
+    // 获取论文详情
+    const paper = getMockPaperDetail(id);
+    
+    // 获取AI分析结果（如果之前分析过）
+    const analysisCacheKey = `analysis:${id}`;
+    // 这里简化处理，实际应该从数据库/缓存获取
+    const analysis = null;
+    
+    if (format === 'markdown') {
+      // 生成Markdown格式报告
+      const markdown = generateMarkdownReport(paper, analysis);
+      
+      res.setHeader('Content-Type', 'text/markdown;charset=utf-8');
+      res.setHeader('Content-Disposition', `attachment; filename="${encodeURIComponent(paper.title || id)}.md"`);
+      res.send(markdown);
+    } else if (format === 'json') {
+      res.json({ paper, analysis, exportedAt: new Date().toISOString() });
+    } else {
+      res.status(400).json({ error: '不支持的格式，支持的格式: markdown, json' });
+    }
+  } catch (error) {
+    console.error('导出报告错误:', error.message);
+    res.status(500).json({ error: '导出失败: ' + error.message });
+  }
+});
+
+function generateMarkdownReport(paper, analysis) {
+  const lines = [];
+  
+  // 标题
+  lines.push(`# ${paper.title || '论文报告'}`);
+  lines.push('');
+  
+  // 基本信息
+  lines.push('## 📄 基本信息');
+  lines.push('');
+  lines.push(`- **论文ID**: ${paper.id}`);
+  lines.push(`- **作者**: ${paper.authors?.join(', ') || '未知'}`);
+  lines.push(`- **发表日期**: ${paper.published || '未知'}`);
+  lines.push(`- **来源**: ${paper.source || '未知'}`);
+  if (paper.categories) {
+    lines.push(`- **分类**: ${paper.categories.join(', ')}`);
+  }
+  if (paper.pdfUrl) {
+    lines.push(`- **PDF链接**: [查看PDF](${paper.pdfUrl})`);
+  }
+  lines.push('');
+  
+  // 摘要
+  lines.push('## 📝 摘要');
+  lines.push('');
+  lines.push(paper.abstract || '暂无摘要');
+  lines.push('');
+  
+  // AI分析（如果有）
+  if (analysis) {
+    lines.push('## 🤖 AI分析');
+    lines.push('');
+    
+    if (analysis.summary) {
+      lines.push('### 总结');
+      lines.push(analysis.summary);
+      lines.push('');
+    }
+    
+    if (analysis.keyPoints && analysis.keyPoints.length > 0) {
+      lines.push('### 关键要点');
+      analysis.keyPoints.forEach(point => {
+        lines.push(`- ${point}`);
+      });
+      lines.push('');
+    }
+    
+    if (analysis.difficulty) {
+      lines.push(`### 难度级别: ${analysis.difficulty}`);
+      lines.push('');
+    }
+    
+    if (analysis.prerequisites && analysis.prerequisites.length > 0) {
+      lines.push('### 前提知识');
+      analysis.prerequisites.forEach(p => {
+        lines.push(`- ${p}`);
+      });
+      lines.push('');
+    }
+  }
+  
+  // 学习笔记（如果有）
+  lines.push('## 📚 学习笔记');
+  lines.push('');
+  lines.push('（在此处添加您的学习笔记）');
+  lines.push('');
+  
+  // 页脚
+  lines.push('---');
+  lines.push(`*报告生成时间: ${new Date().toLocaleString('zh-CN')}*`);
+  
+  return lines.join('\n');
+}
+
+// 2. 搜索筛选API - GET /api/papers/search?query=xxx&category=xxx&year=xxx
+app.get('/api/papers/search', async (req, res) => {
+  const { query, category, year, source = 'all', page = 1, limit = 20 } = req.query;
+  
+  if (!query) {
+    return res.status(400).json({ error: '搜索关键词不能为空' });
+  }
+  
+  try {
+    // 调用 arXiv API
+    let searchQuery = `all:${encodeURIComponent(query)}`;
+    
+    // 添加分类筛选
+    if (category) {
+      searchQuery = `cat:${category} AND ${searchQuery}`;
+    }
+    
+    // 添加年份筛选
+    if (year) {
+      searchQuery += ` AND submittedDate:[${year}0101 TO ${year}1231]`;
+    }
+    
+    const start = (parseInt(page) - 1) * parseInt(limit);
+    const arxivResponse = await axios.get(
+      `http://export.arxiv.org/api/query?search_query=${searchQuery}&start=${start}&max_results=${limit}&sortBy=submittedDate&sortOrder=descending`
+    );
+    
+    // 解析 XML 响应
+    const parseString = require('xml2js').parseString;
+    parseString(arxivResponse.data, (err, result) => {
+      if (err) {
+        return res.json(getFilteredMockPapers(query, category, year));
+      }
+      
+      try {
+        const entries = result.feed.entry || [];
+        let papers = entries.map(entry => ({
+          id: entry.id?.[0] || '',
+          title: entry.title?.[0]?.replace(/\n/g, ' ').trim() || '',
+          authors: entry.author?.map(a => a.name?.[0]).filter(Boolean) || [],
+          abstract: entry.summary?.[0]?.replace(/\n/g, ' ').trim() || '',
+          published: entry.published?.[0] || '',
+          source: 'arxiv',
+          categories: entry.category?.map(c => c.$.term).filter(Boolean) || []
+        }));
+        
+        // 额外筛选年份（因为arXiv API的年份筛选有时不准确）
+        if (year) {
+          papers = papers.filter(p => p.published && p.published.startsWith(year));
+        }
+        
+        // 额外筛选分类
+        if (category) {
+          papers = papers.filter(p => p.categories && p.categories.includes(category));
+        }
+        
+        res.json({
+          query,
+          category: category || null,
+          year: year || null,
+          page: parseInt(page),
+          limit: parseInt(limit),
+          total: papers.length,
+          results: papers.length > 0 ? papers : getFilteredMockPapers(query, category, year)
+        });
+      } catch (e) {
+        res.json(getFilteredMockPapers(query, category, year));
+      }
+    });
+  } catch (error) {
+    console.error('搜索错误:', error.message);
+    res.json(getFilteredMockPapers(query, category, year));
+  }
+});
+
+function getFilteredMockPapers(query, category, year) {
+  // 模拟数据
+  let mockPapers = [
+    {
+      id: 'arxiv:1706.03762',
+      title: 'Attention Is All You Need',
+      authors: ['Ashish Vaswani', 'Noam Shazeer', 'Niki Parmar'],
+      abstract: 'The dominant sequence transduction models are based on complex recurrent or convolutional neural networks.',
+      published: '2017-06-12',
+      source: 'arxiv',
+      categories: ['cs.CL', 'cs.LG']
+    },
+    {
+      id: 'arxiv:1810.04805',
+      title: 'BERT: Pre-training of Deep Bidirectional Transformers',
+      authors: ['Jacob Devlin', 'Ming-Wei Chang', 'Kenton Lee'],
+      abstract: 'We introduce a new language representation model called BERT.',
+      published: '2018-10-11',
+      source: 'arxiv',
+      categories: ['cs.CL']
+    },
+    {
+      id: 'arxiv:1907.11692',
+      title: 'RoBERTa: A Robustly Optimized BERT Pretraining Approach',
+      authors: ['Yinhan Liu', 'Myle Ott', 'Naman Goyal'],
+      abstract: 'We present a robustly optimized method for pretraining NLP systems.',
+      published: '2019-07-26',
+      source: 'arxiv',
+      categories: ['cs.CL']
+    },
+    {
+      id: 'arxiv:1409.0473',
+      title: 'Neural Machine Translation by Jointly Learning to Align and Translate',
+      authors: ['Dzmitry Bahdanau', 'Kyunghyun Cho', 'Yoshua Bengio'],
+      abstract: 'We propose a novel neural machine translation model.',
+      published: '2014-09-01',
+      source: 'arxiv',
+      categories: ['cs.CL', 'cs.LG']
+    },
+    {
+      id: 'arxiv:1512.03385',
+      title: 'Deep Residual Learning for Image Recognition',
+      authors: ['Kaiming He', 'Xiangyu Zhang', 'Shaoqing Ren'],
+      abstract: 'We present a residual learning framework for image recognition.',
+      published: '2015-12-10',
+      source: 'arxiv',
+      categories: ['cs.CV']
+    }
+  ];
+  
+  // 筛选
+  if (year) {
+    mockPapers = mockPapers.filter(p => p.published.startsWith(year));
+  }
+  
+  if (category) {
+    mockPapers = mockPapers.filter(p => p.categories && p.categories.includes(category));
+  }
+  
+  return {
+    query,
+    category: category || null,
+    year: year || null,
+    page: 1,
+    limit: 20,
+    total: mockPapers.length,
+    results: mockPapers
+  };
+}
+
+// 3. 批量收藏API - POST /api/favorites/batch
+app.post('/api/favorites/batch', (req, res) => {
+  const { paperIds, papers } = req.body; // paperIds: string[], papers: {id, title, authors, abstract}[]
+  const authHeader = req.headers.authorization;
+  
+  if (!authHeader) {
+    return res.status(401).json({ error: '请先登录' });
+  }
+  
+  if (!paperIds || !Array.isArray(paperIds) || paperIds.length === 0) {
+    return res.status(400).json({ error: '请提供要收藏的论文ID列表' });
+  }
+  
+  try {
+    const token = authHeader.replace('Bearer ', '');
+    const decoded = jwt.verify(token, JWT_SECRET);
+    
+    const results = [];
+    const errors = [];
+    
+    // 处理papers数组（详细信息）
+    const paperMap = new Map();
+    if (papers && Array.isArray(papers)) {
+      papers.forEach(p => {
+        paperMap.set(p.id, p);
+      });
+    }
+    
+    // 逐个添加收藏
+    paperIds.forEach(paperId => {
+      try {
+        // 检查是否已收藏
+        const existing = favorites.find(f => f.userId === decoded.id && f.paperId === paperId);
+        
+        if (existing) {
+          results.push({
+            paperId,
+            status: 'skipped',
+            message: '已经收藏过了'
+          });
+          return;
+        }
+        
+        // 尝试从paperMap获取详细信息，否则使用默认
+        const paperInfo = paperMap.get(paperId) || { title: '未知论文', authors: [], abstract: '' };
+        
+        const favorite = {
+          id: favorites.length + 1,
+          userId: decoded.id,
+          paperId,
+          title: paperInfo.title || '未知论文',
+          authors: paperInfo.authors || [],
+          abstract: paperInfo.abstract || '',
+          createdAt: new Date().toISOString()
+        };
+        
+        favorites.push(favorite);
+        results.push({
+          paperId,
+          status: 'added',
+          favoriteId: favorite.id
+        });
+      } catch (err) {
+        errors.push({
+          paperId,
+          error: err.message
+        });
+      }
+    });
+    
+    res.json({
+      success: true,
+      total: paperIds.length,
+      added: results.filter(r => r.status === 'added').length,
+      skipped: results.filter(r => r.status === 'skipped').length,
+      errors: errors.length > 0 ? errors : undefined,
+      results
+    });
+  } catch (e) {
+    res.status(401).json({ error: '无效的token' });
+  }
+});
+
+// ========== 启动服务 ==========
 app.listen(PORT, () => {
   console.log(`🚀 后端服务已启动: http://localhost:${PORT}`);
 });

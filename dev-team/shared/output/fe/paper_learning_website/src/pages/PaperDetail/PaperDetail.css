@@ -99,6 +99,25 @@
   position: relative;
 }
 
+/* Export Markdown Button */
+.export-markdown-btn {
+  background: #4f46e5;
+  border-color: #4f46e5;
+  color: white;
+}
+
+.export-markdown-btn:hover {
+  background: #4338ca;
+  border-color: #4338ca;
+  color: white;
+}
+
+.export-markdown-btn:disabled {
+  background: #a5b4fc;
+  border-color: #a5b4fc;
+  cursor: not-allowed;
+}
+
 .export-menu {
   position: absolute;
   top: 100%;
