@@ -356,6 +356,114 @@ app.delete('/api/favorites/:id', (req, res) => {
   }
 });
 
+// ========== 学习进度 API ==========
+const learningProgress = []; // 内存存储
+
+// 获取学习进度
+app.get('/api/progress', (req, res) => {
+  const authHeader = req.headers.authorization;
+  if (!authHeader) {
+    return res.json([]);
+  }
+  
+  try {
+    const token = authHeader.replace('Bearer ', '');
+    const decoded = jwt.verify(token, JWT_SECRET);
+    const userProgress = learningProgress.filter(p => p.userId === decoded.id);
+    res.json(userProgress);
+  } catch (e) {
+    res.json([]);
+  }
+});
+
+// 更新学习进度
+app.post('/api/progress/update', (req, res) => {
+  const { paperId, paperTitle, progress, status } = req.body;
+  const authHeader = req.headers.authorization;
+  
+  if (!authHeader) {
+    return res.json({ error: '请先登录' });
+  }
+  
+  try {
+    const token = authHeader.replace('Bearer ', '');
+    const decoded = jwt.verify(token, JWT_SECRET);
+    
+    // 查找现有进度
+    let existing = learningProgress.find(p => p.userId === decoded.id && p.paperId === paperId);
+    
+    if (existing) {
+      existing.progress = progress;
+      existing.status = status;
+      existing.updatedAt = new Date().toISOString();
+    } else {
+      learningProgress.push({
+        id: learningProgress.length + 1,
+        userId: decoded.id,
+        paperId,
+        paperTitle,
+        progress,
+        status,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
+      });
+    }
+    
+    res.json({ success: true });
+  } catch (e) {
+    res.json({ error: '无效的token' });
+  }
+});
+
+// ========== 用户Profile API ==========
+// 获取用户信息
+app.get('/api/user/profile', (req, res) => {
+  const authHeader = req.headers.authorization;
+  if (!authHeader) {
+    return res.json({ error: '请先登录' });
+  }
+  
+  try {
+    const token = authHeader.replace('Bearer ', '');
+    const decoded = jwt.verify(token, JWT_SECRET);
+    
+    // 简化：从users数组获取
+    const user = users.find(u => u.id === decoded.id);
+    if (user) {
+      res.json({ id: user.id, username: user.username, email: user.email });
+    } else {
+      res.json({ error: '用户不存在' });
+    }
+  } catch (e) {
+    res.json({ error: '无效的token' });
+  }
+});
+
+// 更新用户信息
+app.put('/api/user/profile', (req, res) => {
+  const { email, bio } = req.body;
+  const authHeader = req.headers.authorization;
+  
+  if (!authHeader) {
+    return res.json({ error: '请先登录' });
+  }
+  
+  try {
+    const token = authHeader.replace('Bearer ', '');
+    const decoded = jwt.verify(token, JWT_SECRET);
+    
+    const user = users.find(u => u.id === decoded.id);
+    if (user) {
+      if (email) user.email = email;
+      res.json({ success: true, user: { id: user.id, username: user.username, email: user.email } });
+    } else {
+      res.json({ error: '用户不存在' });
+    }
+  } catch (e) {
+    res.json({ error: '无效的token' });
+  }
+});
+
 app.listen(PORT, () => {
   console.log(`🚀 后端服务已启动: http://localhost:${PORT}`);
 });

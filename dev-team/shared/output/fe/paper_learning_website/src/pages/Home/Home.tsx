@@ -6,8 +6,17 @@ import './Home.css'
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api'
 
+interface Paper {
+  id: string
+  title: string
+  authors: string[]
+  abstract: string
+  source: string
+  published_date: string
+}
+
 const Home = () => {
-  const [searchResults, setSearchResults] = useState([])
+  const [searchResults, setSearchResults] = useState<Paper[]>([])
   const [loading, setLoading] = useState(false)
   
   const handleSearch = async (query: string) => {

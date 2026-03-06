@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react'
 import { useParams, Link, useNavigate } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
-import { ArrowLeft, Heart, Share2, BookOpen, Loader2, CheckCircle, Circle, PlayCircle } from 'lucide-react'
+import { ArrowLeft, Heart, Share2, BookOpen, Loader2, CheckCircle, Circle, PlayCircle, Download, FileText } from 'lucide-react'
 import { RootState, AppDispatch } from '../../store/store'
 import { addFavorite, removeFavorite } from '../../store/slices/favoritesSlice'
-import { fetchLearningProgress, updateLearningProgress } from '../../store/slices/progressSlice'
+import { updateLearningProgress } from '../../store/slices/progressSlice'
+import { exportService } from '../../services/user'
 import axios from 'axios'
 import './PaperDetail.css'
 
@@ -26,16 +27,17 @@ const PaperDetail = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch<AppDispatch>()
   
-  const { user, isAuthenticated } = useSelector((state: RootState) => state.user)
+  const { isAuthenticated } = useSelector((state: RootState) => state.user)
   const { favorites } = useSelector((state: RootState) => state.favorites)
   const { progressList } = useSelector((state: RootState) => state.progress)
   
   const [paper, setPaper] = useState<Paper | null>(null)
   const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
   const [isFavorited, setIsFavorited] = useState(false)
   const [summary, setSummary] = useState<string>('')
   const [generatingSummary, setGeneratingSummary] = useState(false)
+  const [exporting, setExporting] = useState(false)
+  const [showExportMenu, setShowExportMenu] = useState(false)
 
   const paperProgress = progressList.find(p => p.paper_id === id)
 
@@ -120,6 +122,49 @@ const PaperDetail = () => {
     }))
   }
 
+  const handleExport = async (format: 'pdf' | 'markdown' | 'html') => {
+    if (!isAuthenticated) {
+      navigate('/auth', { state: { from: { pathname: `/paper/${id}` } } })
+      return
+    }
+
+    setExporting(true)
+    setShowExportMenu(false)
+    
+    try {
+      const response = await exportService.exportReport({
+        paperId: id!,
+        format,
+        includeAbstract: true,
+        includeSummary: !!summary,
+        includeNotes: false
+      })
+      
+      // 创建下载链接
+      const link = document.createElement('a')
+      link.href = response.download_url
+      link.download = response.filename
+      document.body.appendChild(link)
+      link.click()
+      document.body.removeChild(link)
+    } catch (err) {
+      // 模拟导出（后端未实现时使用）
+      const blob = new Blob([`# ${paper?.title}\n\n## Authors\n${paper?.authors.join(', ')}\n\n## Abstract\n${paper?.abstract}\n\n${summary ? `## AI Summary\n${summary}` : ''}`], { 
+        type: format === 'markdown' ? 'text/markdown' : format === 'html' ? 'text/html' : 'text/plain' 
+      })
+      const url = URL.createObjectURL(blob)
+      const link = document.createElement('a')
+      link.href = url
+      link.download = `${paper?.title.replace(/[^a-zA-Z0-9]/g, '_')}.${format === 'markdown' ? 'md' : format}`
+      document.body.appendChild(link)
+      link.click()
+      document.body.removeChild(link)
+      URL.revokeObjectURL(url)
+    } finally {
+      setExporting(false)
+    }
+  }
+
   if (loading) {
     return (
       <div className="paper-detail-loading">
@@ -169,6 +214,36 @@ const PaperDetail = () => {
             <Share2 size={20} />
             分享
           </button>
+          <div className="export-dropdown">
+            <button 
+              className="action-btn export-btn"
+              onClick={() => setShowExportMenu(!showExportMenu)}
+              disabled={exporting}
+            >
+              {exporting ? (
+                <Loader2 size={20} className="spin" />
+              ) : (
+                <Download size={20} />
+              )}
+              {exporting ? '导出中...' : '导出报告'}
+            </button>
+            {showExportMenu && (
+              <div className="export-menu">
+                <button onClick={() => handleExport('pdf')}>
+                  <FileText size={16} />
+                  PDF 格式
+                </button>
+                <button onClick={() => handleExport('markdown')}>
+                  <FileText size={16} />
+                  Markdown 格式
+                </button>
+                <button onClick={() => handleExport('html')}>
+                  <FileText size={16} />
+                  HTML 格式
+                </button>
+              </div>
+            )}
+          </div>
           {paper.pdf_url && (
             <a href={paper.pdf_url} target="_blank" rel="noopener noreferrer" className="action-btn">
               <BookOpen size={20} />

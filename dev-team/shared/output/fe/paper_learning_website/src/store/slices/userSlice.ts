@@ -1,21 +1,28 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
-import { User, LoginRequest, RegisterRequest } from '../../types'
+import { User, LoginRequest, RegisterRequest, UserProfile, UpdateProfileRequest } from '../../types'
 import { authService } from '../../services/auth'
+import { userService } from '../../services/user'
 
 interface UserState {
   user: User | null
+  profile: UserProfile | null
   token: string | null
   isAuthenticated: boolean
   loading: boolean
+  profileLoading: boolean
   error: string | null
+  profileError: string | null
 }
 
 const initialState: UserState = {
   user: null,
+  profile: null,
   token: localStorage.getItem('token'),
   isAuthenticated: !!localStorage.getItem('token'),
   loading: false,
-  error: null
+  profileLoading: false,
+  error: null,
+  profileError: null
 }
 
 // 异步thunk
@@ -54,6 +61,30 @@ export const fetchCurrentUser = createAsyncThunk(
     } catch (error: any) {
       localStorage.removeItem('token')
       return rejectWithValue(error.message || '获取用户信息失败')
+    }
+  }
+)
+
+export const updateUserProfile = createAsyncThunk(
+  'user/updateProfile',
+  async (data: UpdateProfileRequest, { rejectWithValue }) => {
+    try {
+      const profile = await userService.updateProfile(data)
+      return profile
+    } catch (error: any) {
+      return rejectWithValue(error.message || '更新用户资料失败')
+    }
+  }
+)
+
+export const fetchUserProfile = createAsyncThunk(
+  'user/fetchUserProfile',
+  async (_, { rejectWithValue }) => {
+    try {
+      const profile = await userService.getProfile()
+      return profile
+    } catch (error: any) {
+      return rejectWithValue(error.message || '获取用户资料失败')
     }
   }
 )
@@ -118,6 +149,33 @@ const userSlice = createSlice({
         state.user = null
         state.token = null
         state.isAuthenticated = false
+      })
+      // 获取用户资料
+      .addCase(fetchUserProfile.pending, (state) => {
+        state.profileLoading = true
+        state.profileError = null
+      })
+      .addCase(fetchUserProfile.fulfilled, (state, action) => {
+        state.profileLoading = false
+        state.profile = action.payload
+      })
+      .addCase(fetchUserProfile.rejected, (state, action) => {
+        state.profileLoading = false
+        state.profileError = action.payload as string
+      })
+      // 更新用户资料
+      .addCase(updateUserProfile.pending, (state) => {
+        state.profileLoading = true
+        state.profileError = null
+      })
+      .addCase(updateUserProfile.fulfilled, (state, action) => {
+        state.profileLoading = false
+        state.profile = action.payload
+        state.user = { ...state.user, ...action.payload } as User
+      })
+      .addCase(updateUserProfile.rejected, (state, action) => {
+        state.profileLoading = false
+        state.profileError = action.payload as string
       })
   }
 })

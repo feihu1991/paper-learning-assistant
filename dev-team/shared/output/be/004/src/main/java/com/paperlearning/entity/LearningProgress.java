@@ -5,23 +5,22 @@ import lombok.Data;
 import java.time.LocalDateTime;
 
 @Data
-@TableName("users")
-public class User {
+@TableName("learning_progress")
+public class LearningProgress {
     @TableId(type = IdType.AUTO)
     private Long id;
     
-    private String username;
+    private Long userId;
     
-    private String passwordHash;
+    private Long paperId;
     
-    private String email;
+    private String status;
     
-    private String displayName;
-    
-    private String bio;
-    
-    private String avatarUrl;
+    private Integer progressPercent;
     
     @TableField(fill = FieldFill.INSERT)
     private LocalDateTime createdAt;
+    
+    @TableField(fill = FieldFill.INSERT_UPDATE)
+    private LocalDateTime updatedAt;
 }

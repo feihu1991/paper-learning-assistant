@@ -54,3 +54,36 @@ export interface ProgressStats {
     progress: number
   }[]
 }
+
+// 用户资料相关类型
+export interface UserProfile {
+  id: string
+  username: string
+  email: string
+  bio?: string
+  avatar_url?: string
+  institution?: string
+  created_at: string
+}
+
+export interface UpdateProfileRequest {
+  username?: string
+  email?: string
+  bio?: string
+  avatar_url?: string
+  institution?: string
+}
+
+// 导出报告相关类型
+export interface ExportReportRequest {
+  paperId: string
+  format: 'pdf' | 'markdown' | 'html'
+  includeAbstract: boolean
+  includeSummary: boolean
+  includeNotes: boolean
+}
+
+export interface ExportReportResponse {
+  download_url: string
+  filename: string
+}

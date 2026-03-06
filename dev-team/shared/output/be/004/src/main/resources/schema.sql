@@ -72,3 +72,24 @@ CREATE TABLE IF NOT EXISTS favorites (
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
     FOREIGN KEY (paper_id) REFERENCES papers(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='论文收藏表';
+
+-- 学习进度表 (v1.2新增)
+CREATE TABLE IF NOT EXISTS learning_progress (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    user_id BIGINT NOT NULL COMMENT '用户ID',
+    paper_id BIGINT NOT NULL COMMENT '论文ID',
+    status VARCHAR(20) DEFAULT 'not_started' COMMENT '状态: not_started/in_progress/completed',
+    progress_percent INT DEFAULT 0 COMMENT '进度百分比(0-100)',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    INDEX idx_user_id (user_id),
+    INDEX idx_paper_id (paper_id),
+    UNIQUE KEY uk_user_paper_progress (user_id, paper_id),
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (paper_id) REFERENCES papers(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='学习进度表';
+
+-- 更新用户表添加profile字段 (v1.2新增)
+ALTER TABLE users ADD COLUMN IF NOT EXISTS display_name VARCHAR(100) COMMENT '显示名称' AFTER email;
+ALTER TABLE users ADD COLUMN IF NOT EXISTS bio TEXT COMMENT '个人简介' AFTER display_name;
+ALTER TABLE users ADD COLUMN IF NOT EXISTS avatar_url VARCHAR(500) COMMENT '头像URL' AFTER bio;

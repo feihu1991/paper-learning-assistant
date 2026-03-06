@@ -90,6 +90,53 @@
   background: #fef2f2;
 }
 
+/* Export Dropdown */
+.export-dropdown {
+  position: relative;
+}
+
+.export-btn {
+  position: relative;
+}
+
+.export-menu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin-top: 4px;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 100;
+  min-width: 160px;
+  overflow: hidden;
+}
+
+.export-menu button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 10px 16px;
+  border: none;
+  background: none;
+  color: #444;
+  font-size: 14px;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.2s;
+}
+
+.export-menu button:hover {
+  background: #f3f4f6;
+  color: #4f46e5;
+}
+
+.export-menu button:not(:last-child) {
+  border-bottom: 1px solid #f3f4f6;
+}
+
 .paper-categories {
   display: flex;
   gap: 8px;

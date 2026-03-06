@@ -1,0 +1,15 @@
+{
+  "task_id": "009",
+  "type": "architect",
+  "objective": "规划v1.2版本功能",
+  "specs": {
+    "version": "1.2",
+    "proposals": [
+      {"name": "学习进度跟踪", "priority": "high", "desc": "记录用户学习论文的进度"},
+      {"name": "导出分析报告", "priority": "medium", "desc": "导出PDF/Markdown格式报告"},
+      {"name": "用户Profile页面", "priority": "medium", "desc": "用户个人信息管理"}
+    ]
+  },
+  "status": "in_progress",
+  "created_at": "2026-03-06T18:58:00"
+}

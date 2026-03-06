@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { BookOpen, Heart, ExternalLink } from 'lucide-react'
+import { BookOpen, Heart } from 'lucide-react'
 import './PaperCard.css'
 
 interface PaperCardProps {
