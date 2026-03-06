@@ -69,6 +69,52 @@ public class PaperLearningApplication {
             }
         });
         
+        // ========== 用户认证 ==========
+        // 注册
+        server.createContext("/api/auth/register", exchange -> {
+            try {
+                String body = new String(exchange.getRequestBody().readAllBytes(), "UTF-8");
+                String json = registerUser(body);
+                sendJson(exchange, json);
+            } catch (Exception e) {
+                sendError(exchange, e.getMessage());
+            }
+        });
+        
+        // 登录
+        server.createContext("/api/auth/login", exchange -> {
+            try {
+                String body = new String(exchange.getRequestBody().readAllBytes(), "UTF-8");
+                String json = loginUser(body);
+                sendJson(exchange, json);
+            } catch (Exception e) {
+                sendError(exchange, e.getMessage());
+            }
+        });
+        
+        // 获取收藏列表
+        server.createContext("/api/favorites", exchange -> {
+            try {
+                String authHeader = exchange.getRequestHeaders().getFirst("Authorization");
+                String json = getFavorites(authHeader);
+                sendJson(exchange, json);
+            } catch (Exception e) {
+                sendError(exchange, e.getMessage());
+            }
+        });
+        
+        // 添加收藏
+        server.createContext("/api/favorites/add", exchange -> {
+            try {
+                String body = new String(exchange.getRequestBody().readAllBytes(), "UTF-8");
+                String authHeader = exchange.getRequestHeaders().getFirst("Authorization");
+                String json = addFavorite(body, authHeader);
+                sendJson(exchange, json);
+            } catch (Exception e) {
+                sendError(exchange, e.getMessage());
+            }
+        });
+        
         // 任务列表 - 待分析
         server.createContext("/api/analysis/tasks/pending", exchange -> {
             try {
@@ -515,6 +561,87 @@ public class PaperLearningApplication {
             return new com.google.gson.Gson().toJson(tasks);
         } catch (Exception e) {
             return "[]";
+        }
+    }
+    
+    // ========== 用户认证方法 ==========
+    static String registerUser(String json) {
+        try {
+            String username = extractJsonString(json, "username");
+            String password = extractJsonString(json, "password");
+            String email = extractJsonString(json, "email");
+            
+            Connection conn = getConnection();
+            PreparedStatement ps = conn.prepareStatement(
+                "INSERT INTO users (username, password, email) VALUES (?, ?, ?)",
+                Statement.RETURN_GENERATED_KEYS);
+            ps.setString(1, username);
+            ps.setString(2, password);
+            ps.setString(3, email);
+            ps.executeUpdate();
+            
+            ResultSet rs = ps.getGeneratedKeys();
+            long id = -1;
+            if (rs.next()) {
+                id = rs.getLong(1);
+            }
+            conn.close();
+            
+            String token = "token_" + id + "_" + System.currentTimeMillis();
+            return "{\"token\":\"" + token + "\",\"user\":{\"id\":" + id + ",\"username\":\"" + username + "\"}}";
+        } catch (Exception e) {
+            return "{\"error\":\"" + e.getMessage() + "\"}";
+        }
+    }
+    
+    static String loginUser(String json) {
+        try {
+            String username = extractJsonString(json, "username");
+            String password = extractJsonString(json, "password");
+            
+            Connection conn = getConnection();
+            PreparedStatement ps = conn.prepareStatement(
+                "SELECT id, username FROM users WHERE username = ? AND password = ?");
+            ps.setString(1, username);
+            ps.setString(2, password);
+            ResultSet rs = ps.executeQuery();
+            
+            if (rs.next()) {
+                long id = rs.getLong("id");
+                String token = "token_" + id + "_" + System.currentTimeMillis();
+                conn.close();
+                return "{\"token\":\"" + token + "\",\"user\":{\"id\":" + id + ",\"username\":\"" + username + "\"}}";
+            }
+            conn.close();
+            return "{\"error\":\"用户名或密码错误\"}";
+        } catch (Exception e) {
+            return "{\"error\":\"" + e.getMessage() + "\"}";
+        }
+    }
+    
+    static String getFavorites(String authHeader) {
+        try {
+            if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+                return "[]";
+            }
+            return "[]";
+        } catch (Exception e) {
+            return "[]";
+        }
+    }
+    
+    static String addFavorite(String json, String authHeader) {
+        try {
+            if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+                return "{\"error\":\"请先登录\"}";
+            }
+            
+            String paperId = extractJsonString(json, "paperId");
+            String title = extractJsonString(json, "title");
+            
+            return "{\"success\":true,\"paperId\":\"" + paperId + "\",\"title\":\"" + title + "\"}";
+        } catch (Exception e) {
+            return "{\"error\":\"" + e.getMessage() + "\"}";
         }
     }
 }
