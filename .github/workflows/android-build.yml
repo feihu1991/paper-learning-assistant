@@ -24,31 +24,32 @@ jobs:
       uses: gradle/actions/setup-gradle@v3
       with:
         gradle-version: '8.2'
+        cache-disabled: true  # 禁用缓存避免服务不可用问题
         
     - name: Grant execute permission for gradlew
-      run: chmod +x android-app/gradlew
-      working-directory: ./
+      run: chmod +x gradlew
       
     - name: Build Debug APK
-      run: ./gradlew assembleDebug
-      working-directory: ./android-app
+      run: ./gradlew assembleDebug --no-daemon --stacktrace
+      continue-on-error: false
       
     - name: Run Unit Tests
-      run: ./gradlew testDebugUnitTest
-      working-directory: ./android-app
-      continue-on-error: true
+      run: ./gradlew testDebugUnitTest --no-daemon --stacktrace
+      continue-on-error: true  # 测试失败不影响 APK 构建
       
     - name: Upload Debug APK
       uses: actions/upload-artifact@v4
       with:
         name: debug-apk
-        path: android-app/app/build/outputs/apk/debug/app-debug.apk
+        path: app/build/outputs/apk/debug/app-debug.apk
         retention-days: 30
+        if-no-files-found: error
         
     - name: Upload Test Report
       uses: actions/upload-artifact@v4
       if: always()
       with:
         name: test-report
-        path: android-app/app/build/reports/tests/testDebugUnitTest
+        path: app/build/reports/tests/testDebugUnitTest
         retention-days: 7
+        if-no-files-found: ignore  # 测试报告可选
