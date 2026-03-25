@@ -17,6 +17,7 @@ object Screen {
     const val HOME = "home"
     const val PAPER_DETAIL = "paper_detail"
     const val SEARCH = "search"
+    const val LEARNING = "learning"
 }
 
 /**
@@ -52,10 +53,13 @@ fun NavGraph(
                     type = NavType.LongType
                 }
             )
-        ) {
+        ) { backStackEntry ->
+            val paperId = backStackEntry.arguments?.getLong("paperId") ?: 0L
             PaperDetailScreen(
                 onNavigateBack = { navController.popBackStack() },
-                onNavigateToLearning = { /* TODO: 导航到学习页面 */ }
+                onNavigateToLearning = { paperId ->
+                    navController.navigate("${Screen.LEARNING}/$paperId")
+                }
             )
         }
 
@@ -63,8 +67,8 @@ fun NavGraph(
         composable(route = Screen.SEARCH) {
             SearchScreen(
                 onPaperClick = { paperId ->
-                    // 根据 ID 类型判断是本地论文还是 ArXiv 论文
-                    // TODO: 实现导航逻辑
+                    // 导航到论文详情页
+                    navController.navigate("${Screen.PAPER_DETAIL}/$paperId")
                 }
             )
         }

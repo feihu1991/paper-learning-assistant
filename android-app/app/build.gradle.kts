@@ -80,6 +80,9 @@ dependencies {
     // Coil
     implementation("io.coil-kt:coil-compose:2.5.0")
     
+    // PDF Processing
+    implementation("org.apache.pdfbox:pdfbox-android:2.0.27")
+    
     // Testing
     testImplementation("junit:junit:4.13.2")
     testImplementation("org.mockito:mockito-core:5.8.0")
