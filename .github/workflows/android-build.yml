@@ -3,7 +3,7 @@ name: Android Build
 on:
   push:
     branches: [ main ]
-  workflow_dispatch:  # 允许手动触发
+  workflow_dispatch:
 
 jobs:
   build:
@@ -25,14 +25,36 @@ jobs:
         gradle-version: '8.2'
         
     - name: Build with Gradle
+      id: build
       run: |
         cd android-app
         ./gradlew assembleDebug --no-daemon --stacktrace
         echo "Build completed!"
         
     - name: Upload APK
+      if: steps.build.outcome == 'success'
       uses: actions/upload-artifact@v4
       with:
         name: app-debug
         path: android-app/app/build/outputs/apk/debug/*.apk
         if-no-files-found: error
+        
+    - name: Download error logs on failure
+      if: failure()
+      run: |
+        echo "Build failed! Downloading error logs..."
+        for i in 1 2 3; do
+          curl -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            https://api.github.com/repos/${{ github.repository }}/actions/runs/${{ github.run_id }}/logs \
+            -o error.log && break
+          sleep $((i*10))
+        done
+        
+    - name: Upload error logs
+      if: failure()
+      uses: actions/upload-artifact@v4
+      with:
+        name: error-logs
+        path: error.log
+        if-no-files-found: ignore
+        retention-days: 7
