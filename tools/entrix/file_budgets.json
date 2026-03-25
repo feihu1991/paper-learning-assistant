@@ -1,0 +1,22 @@
+{
+  "description": "文件行数预算配置 - 防止文件过大导致维护困难",
+  "default_budgets": {
+    "*.kt": 500,
+    "*.java": 400,
+    "*.xml": 300,
+    "*.kts": 200
+  },
+  "exceptions": {
+    "android-app/app/build.gradle.kts": 150,
+    "android-app/app/src/main/res/values/strings.xml": 100,
+    "android-app/app/src/main/res/values/themes.xml": 100
+  },
+  "legacy_hotspots": {
+    "description": "历史热点文件 - 只允许缩小，不允许膨胀",
+    "files": []
+  },
+  "enforcement": {
+    "pre_commit": "warning",
+    "pre_push": "error"
+  }
+}
