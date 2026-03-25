@@ -4,7 +4,7 @@ services:
   # MySQL 数据库
   mysql:
     image: mysql:8.0
-    container_name: papertutor-mysql
+    container_name: pla-mysql
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-rootpassword}
       MYSQL_DATABASE: ${MYSQL_DATABASE:-papertutor}
@@ -16,7 +16,7 @@ services:
       - mysql-data:/var/lib/mysql
       - ./backend/src/main/resources/db/init.sql:/docker-entrypoint-initdb.d/init.sql
     networks:
-      - papertutor-network
+      - pla-network
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
       interval: 10s
@@ -28,7 +28,7 @@ services:
     build:
       context: ./backend
       dockerfile: Dockerfile
-    container_name: papertutor-backend
+    container_name: pla-backend
     environment:
       SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE:-docker}
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/papertutor?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
@@ -41,7 +41,7 @@ services:
       mysql:
         condition: service_healthy
     networks:
-      - papertutor-network
+      - pla-network
     volumes:
       - ./media:/app/media
     healthcheck:
@@ -55,7 +55,7 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
-    container_name: papertutor-frontend
+    container_name: pla-frontend
     environment:
       REACT_APP_API_URL: ${REACT_APP_API_URL:-http://localhost:8080}
     ports:
@@ -63,10 +63,10 @@ services:
     depends_on:
       - backend
     networks:
-      - papertutor-network
+      - pla-network
 
 networks:
-  papertutor-network:
+  pla-network:
     driver: bridge
 
 volumes:

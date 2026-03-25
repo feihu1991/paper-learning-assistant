@@ -13,9 +13,9 @@
     </parent>
     
     <groupId>com.papertutor</groupId>
-    <artifactId>paper-tutor</artifactId>
+    <artifactId>paper-learning-assistant</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>Paper Tutor</name>
+    <name>Paper Learning Assistant</name>
     <description>Paper Learning and Analysis Platform</description>
     
     <properties>

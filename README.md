@@ -1,4 +1,4 @@
-# Paper Tutor 📚
+# Paper Learning Assistant 📚
 
 一个基于 AI 的论文学习与解析平台，帮助学生、科研工作者和终身学习者循序渐进地理解学术论文。
 
@@ -33,8 +33,8 @@
 
 ```bash
 # 克隆仓库
-git clone https://github.com/YOUR_USERNAME/paper-tutor.git
-cd paper-tutor
+git clone https://github.com/feihu1991/paper-learning-assistant.git
+cd paper-learning-assistant
 
 # 启动服务
 docker-compose up -d
@@ -65,7 +65,7 @@ npm run dev
 ## 项目结构
 
 ```
-paper-tutor/
+paper-learning-assistant/
 ├── backend/                 # Spring Boot 后端
 │   ├── src/main/java/
 │   │   └── com/papertutor/
@@ -143,5 +143,5 @@ MIT License
 
 ## 联系方式
 
-- 项目主页：https://github.com/YOUR_USERNAME/paper-tutor
-- 问题反馈：https://github.com/YOUR_USERNAME/paper-tutor/issues
+- 项目主页：https://github.com/feihu1991/paper-learning-assistant
+- 问题反馈：https://github.com/feihu1991/paper-learning-assistant/issues

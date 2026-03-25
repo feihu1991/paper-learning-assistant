@@ -1,8 +1,9 @@
-# Paper Tutor API 文档
+# Paper Learning Assistant API 文档
 
 ## 基础信息
 
 - **Base URL**: `http://localhost:8080/api/v1`
+- **Project**: https://github.com/feihu1991/paper-learning-assistant
 - **认证方式**: JWT Token (待实现)
 - **数据格式**: JSON
 

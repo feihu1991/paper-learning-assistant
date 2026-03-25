@@ -1,6 +1,6 @@
 spring:
   application:
-    name: paper-tutor
+    name: paper-learning-assistant
   
   profiles:
     active: ${SPRING_PROFILES_ACTIVE:dev}
