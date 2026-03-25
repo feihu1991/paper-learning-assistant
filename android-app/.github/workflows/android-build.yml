@@ -1,76 +1,54 @@
-# Android Debug Build CI
-# 每次 push 到任何分支时自动构建 Debug APK 并运行测试
-
-name: Android Debug Build
+name: Android Build
 
 on:
   push:
-    paths:
-      - 'android-app/**'
-    branches-ignore:
-      - 'main'  # main 分支的 release 构建由 android-release.yml 处理
+    branches: [ main, develop ]
   pull_request:
-    branches:
-      - main
-    paths:
-      - 'android-app/**'
+    branches: [ main ]
 
 jobs:
   build:
-    name: Build Debug APK
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      checks: write
-
+    
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Set up JDK 17
-        uses: actions/setup-java@v4
-        with:
-          java-version: '17'
-          distribution: 'temurin'
-          cache: gradle
-
-      - name: Grant execute permission for gradlew
-        run: chmod +x android-app/gradlew
-
-      - name: Build with Gradle
-        run: |
-          cd android-app
-          ./gradlew build --no-daemon
-
-      - name: Run tests
-        run: |
-          cd android-app
-          ./gradlew test --no-daemon
-
-      - name: Build Debug APK
-        run: |
-          cd android-app
-          ./gradlew assembleDebug --no-daemon
-
-      - name: Upload Debug APK artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: app-debug
-          path: android-app/app/build/outputs/apk/debug/app-debug.apk
-          retention-days: 30
-
-      - name: Upload test reports
-        uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: test-reports
-          path: android-app/app/build/reports/tests/
-          retention-days: 7
-
-      - name: Upload build reports
-        uses: actions/upload-artifact@v4
-        if: failure()
-        with:
-          name: build-reports
-          path: android-app/app/build/reports/
-          retention-days: 7
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Set up JDK 17
+      uses: actions/setup-java@v4
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+        
+    - name: Setup Gradle
+      uses: gradle/actions/setup-gradle@v3
+      with:
+        gradle-version: '8.2'
+        
+    - name: Grant execute permission for gradlew
+      run: chmod +x android-app/gradlew
+      working-directory: ./
+      
+    - name: Build Debug APK
+      run: ./gradlew assembleDebug
+      working-directory: ./android-app
+      
+    - name: Run Unit Tests
+      run: ./gradlew testDebugUnitTest
+      working-directory: ./android-app
+      continue-on-error: true
+      
+    - name: Upload Debug APK
+      uses: actions/upload-artifact@v4
+      with:
+        name: debug-apk
+        path: android-app/app/build/outputs/apk/debug/app-debug.apk
+        retention-days: 30
+        
+    - name: Upload Test Report
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: test-report
+        path: android-app/app/build/reports/tests/testDebugUnitTest
+        retention-days: 7

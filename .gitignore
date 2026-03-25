@@ -21,9 +21,9 @@ pom.xml.versionsBackup
 pom.xml.next
 release.properties
 
-# Gradle
+# Gradle (root level only, not android-app)
 .gradle/
-build/
+# build/  ← removed to allow android-app/app/build
 
 # IDE
 .idea/
