@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<full-backup-content>
+    <!-- 备份共享偏好设置 -->
+    <include domain="sharedpref" path="."/>
+    
+    <!-- 排除设备特定配置 -->
+    <exclude domain="sharedpref" path="device.xml"/>
+    
+    <!-- 不备份数据库（包含敏感信息） -->
+    <exclude domain="database" path="."/>
+    
+    <!-- 不备份缓存文件 -->
+    <exclude domain="cache" path="."/>
+</full-backup-content>
