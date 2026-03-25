@@ -6,7 +6,9 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.paperlearning.assistant.ui.screens.detail.PaperDetailScreen
 import com.paperlearning.assistant.ui.screens.home.HomeScreen
+import com.paperlearning.assistant.ui.screens.search.SearchScreen
 
 /**
  * 导航路由定义
@@ -50,24 +52,21 @@ fun NavGraph(
                     type = NavType.LongType
                 }
             )
-        ) { backStackEntry ->
-            val paperId = backStackEntry.arguments?.getLong("paperId") ?: return@composable
-            // TODO: 实现论文详情页
-            // PaperDetailScreen(
-            //     paperId = paperId,
-            //     onNavigateBack = { navController.popBackStack() }
-            // )
+        ) {
+            PaperDetailScreen(
+                onNavigateBack = { navController.popBackStack() },
+                onNavigateToLearning = { /* TODO: 导航到学习页面 */ }
+            )
         }
 
         // 搜索页
         composable(route = Screen.SEARCH) {
-            // TODO: 实现搜索页
-            // SearchScreen(
-            //     onNavigateBack = { navController.popBackStack() },
-            //     onNavigateToPaperDetail = { paperId ->
-            //         navController.navigate("${Screen.PAPER_DETAIL}/$paperId")
-            //     }
-            // )
+            SearchScreen(
+                onPaperClick = { paperId ->
+                    // 根据 ID 类型判断是本地论文还是 ArXiv 论文
+                    // TODO: 实现导航逻辑
+                }
+            )
         }
     }
 }
