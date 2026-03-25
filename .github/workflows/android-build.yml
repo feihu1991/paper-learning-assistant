@@ -29,11 +29,11 @@ jobs:
         gradle-version: '8.2'
         
     - name: Grant execute permission for gradlew
-      run: chmod +x gradlew
+      run: chmod +x android-app/gradlew
       
     - name: Build Debug APK
-      run: ./gradlew assembleDebug --no-daemon --stacktrace --info
-      working-directory: ./android-app
+      run: ./gradlew assembleDebug --no-daemon --stacktrace
+      working-directory: android-app
       
     - name: Upload Debug APK
       uses: actions/upload-artifact@v4
