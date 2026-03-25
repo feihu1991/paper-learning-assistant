@@ -1,0 +1,28 @@
+# 签名文件（敏感信息）
+*.keystore
+*.jks
+keystore.properties
+
+# 构建产物
+*.iml
+.gradle
+/local.properties
+/.idea
+.DS_Store
+/build
+/captures
+.externalNativeBuild
+.cxx
+local.properties
+
+# APK 文件（Debug 可以提交，Release 不应提交）
+*.apk
+!*.apk
+*.aab
+
+# 密钥库密码文件
+*.gpg
+*.asc
+
+# 日志文件
+*.log
