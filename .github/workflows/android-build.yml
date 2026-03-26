@@ -23,7 +23,7 @@ jobs:
       uses: gradle/actions/setup-gradle@v3
       with:
         gradle-version: '8.2'
-        gradle-cache: false
+        cache-disabled: true
         
     - name: Build with Gradle
       id: build
