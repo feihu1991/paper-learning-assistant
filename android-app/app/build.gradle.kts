@@ -81,7 +81,7 @@ dependencies {
     implementation("io.coil-kt:coil-compose:2.5.0")
     
     // PDF Processing
-    implementation("org.apache.pdfbox:pdfbox-android:2.0.27")
+    implementation("com.tom-roush:pdfbox-android:2.0.30")
     
     // Testing
     testImplementation("junit:junit:4.13.2")
