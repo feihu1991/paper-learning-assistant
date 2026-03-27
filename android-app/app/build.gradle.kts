@@ -28,6 +28,25 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            // Load signing config from gradle.properties (injected by CI workflow)
+            val storeFilePath = project.properties["PAPER_LEARNING_STORE_FILE"] as String?
+            val storePassword = project.properties["PAPER_LEARNING_STORE_PASSWORD"] as String?
+            val keyAlias = project.properties["PAPER_LEARNING_KEY_ALIAS"] as String?
+            val keyPassword = project.properties["PAPER_LEARNING_KEY_PASSWORD"] as String?
+            if (storeFilePath != null && storePassword != null && keyAlias != null && keyPassword != null) {
+                signingConfigs {
+                    create("release") {
+                        this.storeFile = file(storeFilePath)
+                        this.storePassword = storePassword
+                        this.keyAlias = keyAlias
+                        this.keyPassword = keyPassword
+                    }
+                }
+                signingConfig = signingConfigs.getByName("release")
+            }
+        }
+        debug {
+            isMinifyEnabled = false
         }
     }
     compileOptions {

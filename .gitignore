@@ -80,3 +80,8 @@ coverage/
 
 # Test results
 test-results/
+
+# Android signing
+*.keystore
+release.keystore
+

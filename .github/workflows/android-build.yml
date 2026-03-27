@@ -24,23 +24,57 @@ jobs:
       with:
         gradle-version: '8.2'
         cache-disabled: true
+
+    - name: Generate release keystore
+      run: |
+        cd android-app/app
+        # Generate a JKS keystore (valid 10000 days)
+        keytool -genkeypair \
+          -keystore release.keystore \
+          -alias release \
+          -keyalg RSA -keysize 2048 \
+          -validity 10000 \
+          -storepass paperlearning2024 \
+          -keypass paperlearning2024 \
+          -dname "CN=Paper Learning, OU=App, O=PaperLearning, L=Wuhan, ST=Hubei, C=CN" \
+          -noprompt
+        echo "Keystore generated successfully"
         
-    - name: Build with Gradle
-      id: build
+    - name: Configure signing
       run: |
         cd android-app
-        ./gradlew assembleDebug --no-daemon --stacktrace
-        echo "Build completed!"
+        # Write signing config to gradle.properties
+        cat >> gradle.properties << 'EOF'
+        PAPER_LEARNING_STORE_FILE=app/release.keystore
+        PAPER_LEARNING_STORE_PASSWORD=paperlearning2024
+        PAPER_LEARNING_KEY_ALIAS=release
+        PAPER_LEARNING_KEY_PASSWORD=paperlearning2024
+        EOF
         
-    - name: Upload APK
-      if: steps.build.outcome == 'success'
+    - name: Build debug APK
+      id: build-debug
+      run: |
+        cd android-app
+        ./gradlew assembleDebug --no-daemon
+        
+    - name: Build release APK
+      id: build-release
+      run: |
+        cd android-app
+        ./gradlew assembleRelease --no-daemon
+        
+    - name: Upload APK files
+      if: steps.build-release.outcome == 'success'
       uses: actions/upload-artifact@v4
       with:
-        name: app-debug
-        path: android-app/app/build/outputs/apk/debug/*.apk
+        name: app-release
+        path: |
+          android-app/app/build/outputs/apk/debug/*.apk
+          android-app/app/build/outputs/apk/release/*.apk
         if-no-files-found: error
+        retention-days: 7
         
-    - name: Download error logs on failure
+    - name: Upload error logs on failure
       if: failure()
       run: |
         echo "Build failed! Downloading error logs..."
@@ -50,6 +84,7 @@ jobs:
             -o error.log && break
           sleep $((i*10))
         done
+        echo "done"
         
     - name: Upload error logs
       if: failure()
