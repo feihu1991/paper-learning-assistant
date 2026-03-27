@@ -53,7 +53,7 @@ fun ProgressCard(
                 )
                 
                 Icon(
-                    imageVector = Icons.Default.School,
+                    imageVector = Icons.Filled.School,
                     contentDescription = null,
                     tint = MaterialTheme.colorScheme.primary,
                     modifier = Modifier.size(28.dp)

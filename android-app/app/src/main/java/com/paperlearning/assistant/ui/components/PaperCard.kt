@@ -43,7 +43,7 @@ fun PaperCard(
                 contentAlignment = Alignment.Center
             ) {
                 Icon(
-                    imageVector = Icons.Default.Description,
+                    imageVector = Icons.Filled.Description,
                     contentDescription = null,
                     tint = when (paper.parsedStatus) {
                         ParseStatus.COMPLETED -> MaterialTheme.colorScheme.primary
@@ -56,7 +56,7 @@ fun PaperCard(
                 
                 if (paper.parsedStatus == ParseStatus.COMPLETED) {
                     Icon(
-                        imageVector = Icons.Default.Done,
+                        imageVector = Icons.Filled.Done,
                         contentDescription = "已完成",
                         tint = MaterialTheme.colorScheme.onPrimary,
                         modifier = Modifier

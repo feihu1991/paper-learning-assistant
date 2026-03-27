@@ -49,7 +49,7 @@ class UpdateProgressUseCase @Inject constructor(
 
             Result.success(Unit)
         } catch (e: Exception) {
-            Result.failure(e.message ?: "更新进度失败")
+            Result.failure(e)
         }
     }
 }
