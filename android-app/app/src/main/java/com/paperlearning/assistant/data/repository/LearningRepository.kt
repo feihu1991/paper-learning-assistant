@@ -80,19 +80,9 @@ class LearningRepository @Inject constructor(
             updateUserProgress(
                 it.copy(
                     completedSteps = completedSteps.toString(),
-                    completedAt = if (completedSteps.size >= getTotalSteps(paperId)) {
-                        System.currentTimeMillis()
-                    } else {
-                        it.completedAt
-                    }
+                    completedAt = it.completedAt
                 )
             )
         }
-    }
-
-    private suspend fun getTotalSteps(paperId: Long): Int {
-        return getLearningStepsByPaperId(paperId)
-            .first()
-            .size
     }
 }
