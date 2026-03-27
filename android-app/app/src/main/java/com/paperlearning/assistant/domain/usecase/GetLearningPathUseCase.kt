@@ -1,7 +1,7 @@
 package com.paperlearning.assistant.domain.usecase
 
 import com.paperlearning.assistant.data.model.LearningStepEntity
-import com.paperlearning.assistant.data.repository.LearningStepRepository
+import com.paperlearning.assistant.data.repository.LearningRepository
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
@@ -10,9 +10,9 @@ import javax.inject.Inject
  * 返回指定论文的所有学习步骤，按顺序排列
  */
 class GetLearningPathUseCase @Inject constructor(
-    private val learningStepRepository: LearningStepRepository
+    private val learningRepository: LearningRepository
 ) {
     operator fun invoke(paperId: Long): Flow<List<LearningStepEntity>> {
-        return learningStepRepository.getStepsByPaperId(paperId)
+        return learningRepository.getLearningStepsByPaperId(paperId)
     }
 }

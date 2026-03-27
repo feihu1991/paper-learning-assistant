@@ -3,7 +3,8 @@ package com.paperlearning.assistant.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.paperlearning.assistant.data.model.PaperEntity
-import com.paperlearning.assistant.data.remote.arxiv.ArxivRepository
+import com.paperlearning.assistant.data.repository.ArxivRepository
+import com.paperlearning.assistant.data.repository.ArxivSearchResult
 import com.paperlearning.assistant.data.repository.PaperRepository
 import com.paperlearning.assistant.domain.usecase.GetAllPapersUseCase
 import com.paperlearning.assistant.domain.usecase.SearchPapersUseCase
@@ -12,18 +13,9 @@ import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-data class ArxivPaper(
-    val arxivId: String,
-    val title: String,
-    val authors: List<String>,
-    val abstract: String,
-    val published: String,
-    val pdfUrl: String
-)
-
 data class SearchUiState(
     val query: String = "",
-    val searchResults: List<ArxivPaper> = emptyList(),
+    val searchResults: List<ArxivSearchResult> = emptyList(),
     val localPapers: List<PaperEntity> = emptyList(),
     val isLoading: Boolean = false,
     val isSearching: Boolean = false,

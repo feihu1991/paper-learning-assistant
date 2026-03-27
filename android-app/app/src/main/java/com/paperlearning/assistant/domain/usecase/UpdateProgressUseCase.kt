@@ -2,7 +2,7 @@ package com.paperlearning.assistant.domain.usecase
 
 import com.paperlearning.assistant.data.model.LearningMode
 import com.paperlearning.assistant.data.model.UserProgressEntity
-import com.paperlearning.assistant.data.repository.UserProgressRepository
+import com.paperlearning.assistant.data.repository.LearningRepository
 import javax.inject.Inject
 
 /**
@@ -10,7 +10,7 @@ import javax.inject.Inject
  * 记录用户当前学习步骤和完成状态
  */
 class UpdateProgressUseCase @Inject constructor(
-    private val userProgressRepository: UserProgressRepository
+    private val learningRepository: LearningRepository
 ) {
     data class UpdateRequest(
         val paperId: Long,
@@ -20,14 +20,14 @@ class UpdateProgressUseCase @Inject constructor(
         val isCompleted: Boolean = false
     )
 
-    suspend operator fun invoke(request: UpdateRequest): Result<Unit, String> {
+    suspend operator fun invoke(request: UpdateRequest): Result<Unit> {
         return try {
-            val existingProgress = userProgressRepository.getProgressByPaperId(request.paperId)
-            
+            val existingProgress = learningRepository.getUserProgressByPaperId(request.paperId)
+
             val progress = if (existingProgress != null) {
                 existingProgress.copy(
                     currentStep = request.currentStep,
-                    completedSteps = request.completedSteps.joinToString(",", transform = { it.toString() }),
+                    completedSteps = request.completedSteps.joinToString(","),
                     learningMode = request.learningMode,
                     completedAt = if (request.isCompleted) System.currentTimeMillis() else null
                 )
@@ -35,18 +35,18 @@ class UpdateProgressUseCase @Inject constructor(
                 UserProgressEntity(
                     paperId = request.paperId,
                     currentStep = request.currentStep,
-                    completedSteps = request.completedSteps.joinToString(",", transform = { it.toString() }),
+                    completedSteps = request.completedSteps.joinToString(","),
                     learningMode = request.learningMode,
                     completedAt = if (request.isCompleted) System.currentTimeMillis() else null
                 )
             }
-            
+
             if (existingProgress != null) {
-                userProgressRepository.updateProgress(progress)
+                learningRepository.updateUserProgress(progress)
             } else {
-                userProgressRepository.insertProgress(progress)
+                learningRepository.saveUserProgress(progress)
             }
-            
+
             Result.success(Unit)
         } catch (e: Exception) {
             Result.failure(e.message ?: "更新进度失败")
