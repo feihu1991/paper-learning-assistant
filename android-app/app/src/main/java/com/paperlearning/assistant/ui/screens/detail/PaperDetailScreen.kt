@@ -109,7 +109,7 @@ fun PaperDetailScreen(
                         )
                         Spacer(modifier = Modifier.height(8.dp))
                         Text(
-                            text = uiState.error,
+                            text = uiState.error ?: "",
                             style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
@@ -146,8 +146,9 @@ fun PaperDetailScreen(
 
                 else -> {
                     // 内容状态
+                    val paper = uiState.paper
                     PaperDetailContent(
-                        paper = uiState.paper,
+                        paper = paper!!,
                         learningSteps = uiState.learningSteps,
                         isParsing = uiState.isParsing,
                         onParseClick = { viewModel.parsePaper() },
