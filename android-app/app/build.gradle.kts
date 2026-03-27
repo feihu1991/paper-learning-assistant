@@ -88,7 +88,7 @@ dependencies {
     implementation("com.github.TomRoush:PdfBox-Android:1.8.10.2")
     
     // Security - EncryptedSharedPreferences for API key storage
-    implementation("androidx.security:security-crypto:1.1.0-alpha06")
+    implementation("androidx.security:security-crypto:1.1.0")
     
     // Testing
     testImplementation("junit:junit:4.13.2")

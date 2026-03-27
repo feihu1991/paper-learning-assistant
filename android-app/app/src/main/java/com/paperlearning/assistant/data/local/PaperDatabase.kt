@@ -2,10 +2,22 @@ package com.paperlearning.assistant.data.local
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
 import com.paperlearning.assistant.data.local.dao.*
 import com.paperlearning.assistant.data.model.*
 
 @Database(
+    entities = [
+        PaperEntity::class,
+        LearningStepEntity::class,
+        UserProgressEntity::class,
+        LlmConfigEntity::class
+    ],
+    version = 1,
+    exportSchema = true
+)
+@TypeConverters(Converters::class)
+abstract class PaperDatabase : RoomDatabase() {
     entities = [
         PaperEntity::class,
         LearningStepEntity::class,
