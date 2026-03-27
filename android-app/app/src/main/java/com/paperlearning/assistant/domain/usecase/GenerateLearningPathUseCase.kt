@@ -9,6 +9,7 @@ import com.paperlearning.assistant.data.repository.LearningRepository
 import com.paperlearning.assistant.data.repository.PaperRepository
 import com.paperlearning.assistant.data.repository.SettingsRepository
 import com.paperlearning.assistant.util.LearningPathTemplates
+import kotlinx.coroutines.flow.first
 import javax.inject.Inject
 
 /**
@@ -84,7 +85,7 @@ class GenerateLearningPathUseCase @Inject constructor(
 
             // 7. 调用 LLM 生成学习内容
             val llmResponse = llmClient.simpleChat(
-                baseUrl = llmConfig.baseUrl,
+                baseUrl = llmConfig.apiEndpoint,
                 apiKey = llmConfig.apiKey,
                 model = llmConfig.model,
                 userMessage = userPrompt,
@@ -200,9 +201,8 @@ class GenerateLearningPathUseCase @Inject constructor(
      * 验证学习路径是否已生成
      */
     suspend fun isPathGenerated(paperId: Long): Boolean {
-        val steps = learningRepository.getLearningStepsByPaperId(paperId)
-            .firstOrNull()
-        return !steps.isNullOrEmpty()
+        val steps = learningRepository.getLearningStepsByPaperId(paperId).first()
+        return steps.isNotEmpty()
     }
 
     /**
