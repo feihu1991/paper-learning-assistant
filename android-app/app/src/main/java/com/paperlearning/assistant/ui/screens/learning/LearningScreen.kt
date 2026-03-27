@@ -294,7 +294,7 @@ private fun LearningContent(
                         Icon(
                             imageVector = when {
                                 index == currentStepIndex -> Icons.Default.PlayArrow
-                                index in completedSteps -> Icons.Filled.Done
+                                index in completedSteps -> Icons.Filled.CheckCircle
                                 else -> Icons.Filled.RadioButtonUnchecked
                             },
                             contentDescription = null,

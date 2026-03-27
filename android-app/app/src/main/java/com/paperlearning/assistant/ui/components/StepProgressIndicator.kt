@@ -136,7 +136,7 @@ private fun StepDotContent(
     ) {
         if (isCompleted && !isCurrent) {
             Icon(
-                imageVector = androidx.compose.material.icons.Icons.Filled.Done,
+                imageVector = androidx.compose.material.icons.Icons.Filled.CheckCircle,
                 contentDescription = "已完成",
                 tint = contentColor,
                 modifier = Modifier.size(16.dp)

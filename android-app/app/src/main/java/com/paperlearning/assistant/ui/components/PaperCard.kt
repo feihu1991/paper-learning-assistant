@@ -56,7 +56,7 @@ fun PaperCard(
                 
                 if (paper.parsedStatus == ParseStatus.COMPLETED) {
                     Icon(
-                        imageVector = Icons.Filled.Done,
+                        imageVector = Icons.Default.Done,
                         contentDescription = "已完成",
                         tint = MaterialTheme.colorScheme.onPrimary,
                         modifier = Modifier

@@ -100,7 +100,7 @@ fun StepContent(
                     )
                 ) {
                     Icon(
-                        imageVector = Icons.Filled.Done,
+                        imageVector = Icons.Filled.CheckCircle,
                         contentDescription = null,
                         modifier = Modifier.size(20.dp)
                     )
