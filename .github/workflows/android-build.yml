@@ -76,17 +76,11 @@ jobs:
         if-no-files-found: error
         retention-days: 7
 
-    - name: Create Git tag
-      if: steps.build-release.outcome == 'success'
-      run: |
-        TAG="v$(date +%Y%m%d-%H%M%S)"
-        git tag "$TAG"
-        git push origin "refs/tags/$TAG"
-
     - name: Create GitHub Release
       if: steps.build-release.outcome == 'success'
       uses: softprops/action-gh-release@v2
       with:
+        tag_name: v${{ github.run_number }}
         files: |
           android-app/app/build/outputs/apk/debug/*.apk
           android-app/app/build/outputs/apk/release/*.apk
