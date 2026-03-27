@@ -5,6 +5,7 @@ import androidx.room.Room
 import androidx.room.migration.AutoMigrationSpec
 import com.paperlearning.assistant.data.local.PaperDatabase
 import com.paperlearning.assistant.data.local.dao.*
+import com.paperlearning.assistant.util.PdfParser
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -54,5 +55,11 @@ object DatabaseModule {
     @Singleton
     fun provideLlmConfigDao(database: PaperDatabase): LlmConfigDao {
         return database.llmConfigDao()
+    }
+
+    @Provides
+    @Singleton
+    fun providePdfParser(): PdfParser {
+        return PdfParser()
     }
 }
