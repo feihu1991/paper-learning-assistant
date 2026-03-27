@@ -7,6 +7,8 @@ import com.paperlearning.assistant.data.model.PaperEntity
 import com.paperlearning.assistant.data.model.ParseStatus
 import com.paperlearning.assistant.data.remote.llm.LlmClient
 import com.paperlearning.assistant.data.remote.llm.LlmRequestBuilder
+import com.paperlearning.assistant.data.remote.llm.getAssistantResponse
+import com.paperlearning.assistant.data.remote.llm.getErrorMessage
 import com.paperlearning.assistant.data.remote.llm.hasError
 import com.paperlearning.assistant.data.repository.PaperRepository
 import com.paperlearning.assistant.data.repository.SettingsRepository

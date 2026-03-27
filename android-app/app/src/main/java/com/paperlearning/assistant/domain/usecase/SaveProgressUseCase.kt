@@ -20,12 +20,11 @@ class SaveProgressUseCase @Inject constructor(
         val isCompleted: Boolean = false
     )
 
-    suspend operator fun invoke(request: SaveRequest): Result<Unit, String> {
+    suspend operator fun invoke(request: SaveRequest): Result<Unit> {
         return try {
             val existingProgress = learningRepository.getUserProgressByPaperId(request.paperId)
             
             if (existingProgress != null) {
-                // 更新现有进度
                 val updatedProgress = existingProgress.copy(
                     currentStep = request.currentStep,
                     completedSteps = formatCompletedSteps(request.completedSteps),
@@ -34,7 +33,6 @@ class SaveProgressUseCase @Inject constructor(
                 )
                 learningRepository.updateUserProgress(updatedProgress)
             } else {
-                // 创建新进度记录
                 val newProgress = UserProgressEntity(
                     paperId = request.paperId,
                     currentStep = request.currentStep,
@@ -48,7 +46,7 @@ class SaveProgressUseCase @Inject constructor(
             
             Result.success(Unit)
         } catch (e: Exception) {
-            Result.failure(e.message ?: "保存进度失败")
+            Result.failure(e)
         }
     }
     

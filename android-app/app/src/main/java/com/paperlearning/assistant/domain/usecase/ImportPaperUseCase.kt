@@ -28,7 +28,7 @@ class ImportPaperUseCase @Inject constructor(
     ): Result {
         return try {
             // 提取 PDF 元数据
-            val metadata = pdfParser.extractMetadata(uri)
+            val metadata = pdfParser.extractMetadata(context, uri)
             
             // 创建论文实体
             val paper = PaperEntity(
