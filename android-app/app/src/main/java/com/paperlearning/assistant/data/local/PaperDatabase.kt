@@ -18,16 +18,6 @@ import com.paperlearning.assistant.data.model.*
 )
 @TypeConverters(Converters::class)
 abstract class PaperDatabase : RoomDatabase() {
-    entities = [
-        PaperEntity::class,
-        LearningStepEntity::class,
-        UserProgressEntity::class,
-        LlmConfigEntity::class
-    ],
-    version = 1,
-    exportSchema = true
-)
-abstract class PaperDatabase : RoomDatabase() {
     abstract fun paperDao(): PaperDao
     abstract fun learningStepDao(): LearningStepDao
     abstract fun userProgressDao(): UserProgressDao
