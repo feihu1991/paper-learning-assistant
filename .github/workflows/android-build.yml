@@ -73,7 +73,20 @@ jobs:
           android-app/app/build/outputs/apk/release/*.apk
         if-no-files-found: error
         retention-days: 7
-        
+
+    - name: Create GitHub Release
+      if: steps.build-release.outcome == 'success'
+      uses: softprops/action-gh-release@v2
+      with:
+        files: |
+          android-app/app/build/outputs/apk/debug/*.apk
+          android-app/app/build/outputs/apk/release/*.apk
+        draft: false
+        prerelease: false
+        generate_release_notes: true
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
     - name: Upload error logs on failure
       if: failure()
       run: |
