@@ -66,6 +66,7 @@ dependencies {
     
     // Navigation
     implementation("androidx.navigation:navigation-compose:2.7.6")
+    implementation("androidx.hilt:hilt-navigation-compose:1.1.0")
     
     // Room - use KSP instead of KAPT to avoid annotation processing issues
     implementation("androidx.room:room-ktx:2.6.1")

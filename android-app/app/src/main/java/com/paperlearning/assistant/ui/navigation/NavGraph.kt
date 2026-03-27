@@ -57,7 +57,7 @@ fun NavGraph(
             val paperId = backStackEntry.arguments?.getLong("paperId") ?: 0L
             PaperDetailScreen(
                 onNavigateBack = { navController.popBackStack() },
-                onNavigateToLearning = { paperId ->
+                onNavigateToLearning = {
                     navController.navigate("${Screen.LEARNING}/$paperId")
                 }
             )
