@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface LlmConfigDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(config: LlmConfigEntity)
+    suspend fun insert(config: LlmConfigEntity): Long
 
     @Update
     suspend fun update(config: LlmConfigEntity)

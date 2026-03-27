@@ -4,6 +4,7 @@ import com.paperlearning.assistant.data.local.dao.LlmConfigDao
 import com.paperlearning.assistant.data.model.LlmConfigEntity
 import com.paperlearning.assistant.data.security.ApiKeyStore
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -24,9 +25,7 @@ class SettingsRepository @Inject constructor(
      * @param apiKey The plaintext API key to encrypt and store separately
      */
     suspend fun saveLlmConfig(config: LlmConfigEntity, apiKey: String) {
-        // Insert config into Room first to get the generated ID
         val configId = llmConfigDao.insert(config)
-        // Store the actual API key encrypted in secure storage
         apiKeyStore.saveApiKey(configId, apiKey)
     }
 
@@ -38,7 +37,6 @@ class SettingsRepository @Inject constructor(
      */
     suspend fun updateLlmConfig(config: LlmConfigEntity, apiKey: String?) {
         llmConfigDao.update(config)
-        // If a new API key is provided, update the secure store
         apiKey?.let { apiKeyStore.saveApiKey(config.id, it) }
     }
 
@@ -49,12 +47,10 @@ class SettingsRepository @Inject constructor(
      */
     suspend fun getActiveLlmConfig(): LlmConfigEntity? {
         val config = llmConfigDao.getActive() ?: return null
-        // Inject the decrypted API key from secure storage
         val decryptedApiKey = apiKeyStore.getApiKey(config.id)
         return if (decryptedApiKey != null) {
             config.copy(apiKey = decryptedApiKey)
         } else {
-            // No stored key means this config was never fully saved — return as-is
             config
         }
     }
@@ -73,7 +69,7 @@ class SettingsRepository @Inject constructor(
      * @param configId The ID of the config to activate
      */
     suspend fun setActiveLlmConfig(configId: Long) {
-        val allConfigs = llmConfigDao.getAll().firstOrNull() ?: return
+        val allConfigs = llmConfigDao.getAll().first()
         allConfigs.forEach { config ->
             llmConfigDao.update(config.copy(isActive = config.id == configId))
         }
@@ -86,16 +82,14 @@ class SettingsRepository @Inject constructor(
      */
     suspend fun deleteLlmConfig(config: LlmConfigEntity) {
         if (!config.isPreset) {
-            // If deleting the active config, switch to a preset
             if (config.isActive) {
                 llmConfigDao.getActive()?.let {
-                    val presets = llmConfigDao.getPresets().firstOrNull()
-                    presets?.firstOrNull()?.let { default ->
+                    val presets = llmConfigDao.getPresets().first()
+                    presets.firstOrNull()?.let { default ->
                         llmConfigDao.update(default.copy(isActive = true))
                     }
                 }
             }
-            // Remove the encrypted API key from secure storage
             apiKeyStore.deleteApiKey(config.id)
             llmConfigDao.update(config)
         }
