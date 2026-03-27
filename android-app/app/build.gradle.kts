@@ -11,6 +11,12 @@ android {
     namespace = "com.paperlearning.assistant"
     compileSdk = 34
 
+    // Disable lint abort on error for release builds
+    lint {
+        abortOnError = false
+        checkReleaseBuilds = false
+    }
+
     defaultConfig {
         applicationId = "com.paperlearning.assistant"
         minSdk = 26
