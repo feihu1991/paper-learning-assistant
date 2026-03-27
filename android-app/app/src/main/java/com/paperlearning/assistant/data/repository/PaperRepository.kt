@@ -32,7 +32,7 @@ class PaperRepository @Inject constructor(
     }
 
     fun getPapersByStatus(status: ParseStatus): Flow<List<PaperEntity>> {
-        return paperDao.getByStatus(status)
+        return paperDao.getByStatus(status.ordinal)
     }
 
     fun searchPapers(query: String): Flow<List<PaperEntity>> {

@@ -2,6 +2,7 @@ package com.paperlearning.assistant.data.local.dao
 
 import androidx.room.*
 import com.paperlearning.assistant.data.model.PaperEntity
+import com.paperlearning.assistant.data.model.ParseStatus
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -22,7 +23,7 @@ interface PaperDao {
     fun getAll(): Flow<List<PaperEntity>>
 
     @Query("SELECT * FROM papers WHERE parsedStatus = :status")
-    fun getByStatus(status: ParseStatus): Flow<List<PaperEntity>>
+    fun getByStatus(status: Int): Flow<List<PaperEntity>>
 
     @Query("SELECT * FROM papers WHERE title LIKE '%' || :query || '%' OR abstract LIKE '%' || :query || '%'")
     fun search(query: String): Flow<List<PaperEntity>>
