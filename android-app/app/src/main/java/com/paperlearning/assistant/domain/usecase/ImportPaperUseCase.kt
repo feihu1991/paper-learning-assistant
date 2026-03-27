@@ -35,7 +35,7 @@ class ImportPaperUseCase @Inject constructor(
                 arxivId = arxivId,
                 title = metadata.title ?: "未知标题",
                 authors = metadata.authors?.joinToString(", ") ?: "",
-                abstract = metadata.abstract ?: "",
+                paperAbstract = metadata.abstract ?: "",
                 pdfPath = "" // 将在 copyToInternalStorage 后更新
             )
             

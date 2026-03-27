@@ -79,7 +79,7 @@ class GenerateLearningPathUseCase @Inject constructor(
                 mode = request.learningMode,
                 title = paper.title,
                 authors = paper.authors,
-                abstract = paper.abstract
+                abstract = paper.paperAbstract
             )
 
             // 7. 调用 LLM 生成学习内容

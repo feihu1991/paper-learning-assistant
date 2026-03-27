@@ -13,7 +13,7 @@ import com.paperlearning.assistant.ui.components.SearchBar
 import com.paperlearning.assistant.ui.components.PaperListItem
 import com.paperlearning.assistant.viewmodel.SearchViewModel
 import com.paperlearning.assistant.viewmodel.SearchTab
-import com.paperlearning.assistant.viewmodel.ArxivPaper
+import com.paperlearning.assistant.data.repository.ArxivSearchResult
 
 @Composable
 fun SearchScreen(
@@ -81,7 +81,7 @@ fun SearchScreen(
                             PaperListItem(
                                 title = paper.title,
                                 authors = paper.authors,
-                                abstract = paper.abstract,
+                                abstract = paper.paperAbstract,
                                 onClick = { onPaperClick(paper.id.toString()) }
                             )
                         }

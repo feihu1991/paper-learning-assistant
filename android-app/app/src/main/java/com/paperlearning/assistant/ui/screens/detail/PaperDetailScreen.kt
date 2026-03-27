@@ -235,10 +235,10 @@ private fun PaperDetailContent(
         Spacer(modifier = Modifier.height(8.dp))
 
         // 摘要部分
-        if (!paper.abstract.isNullOrBlank()) {
+        if (!paper.paperAbstract.isNullOrBlank()) {
             SectionCard(title = "摘要") {
                 Text(
-                    text = paper.abstract,
+                    text = paper.paperAbstract,
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     lineHeight = MaterialTheme.typography.bodyMedium.lineHeight * 1.5

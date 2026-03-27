@@ -9,7 +9,8 @@ data class PaperEntity(
     val arxivId: String?,
     val title: String,
     val authors: String,  // JSON array string
-    val abstract: String,
+    @ColumnInfo(name = "paper_abstract")
+    val paperAbstract: String,
     val pdfPath: String,
     val parsedStatus: ParseStatus = ParseStatus.NOT_PARSED,
     val createdAt: Long = System.currentTimeMillis()

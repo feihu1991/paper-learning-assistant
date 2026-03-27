@@ -108,7 +108,7 @@ class ParsePaperUseCase @Inject constructor(
             val updatedPaper = paper.copy(
                 title = metadata.title ?: paper.title,
                 authors = metadata.authors?.joinToString(", ") ?: paper.authors,
-                abstract = metadata.abstract ?: paper.abstract,
+                paperAbstract = metadata.abstract ?: paper.paperAbstract,
                 parsedStatus = ParseStatus.COMPLETED
             )
 
@@ -163,7 +163,7 @@ class ParsePaperUseCase @Inject constructor(
             appendLine()
             appendLine("作者：${metadata.authors?.joinToString(", ") ?: paper.authors}")
             appendLine()
-            appendLine("摘要：${metadata.abstract ?: paper.abstract}")
+            appendLine("摘要：${metadata.abstract ?: paper.paperAbstract}")
             appendLine()
             appendLine("请基于以上信息，按照系统提示中的格式生成结构化摘要。")
         }
