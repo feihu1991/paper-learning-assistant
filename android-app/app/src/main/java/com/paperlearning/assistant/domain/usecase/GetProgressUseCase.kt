@@ -2,6 +2,7 @@ package com.paperlearning.assistant.domain.usecase
 
 import com.paperlearning.assistant.data.model.UserProgressEntity
 import com.paperlearning.assistant.data.repository.LearningRepository
+import kotlinx.coroutines.flow.first
 import javax.inject.Inject
 
 /**
@@ -22,7 +23,7 @@ class GetProgressUseCase @Inject constructor(
         val progressPercentage: Float
     )
 
-    suspend operator fun invoke(paperId: Long): Result<ProgressResult?, String> {
+    suspend operator fun invoke(paperId: Long): Result<ProgressResult?> {
         return try {
             val progress = learningRepository.getUserProgressByPaperId(paperId)
             
@@ -51,7 +52,7 @@ class GetProgressUseCase @Inject constructor(
                 )
             }
         } catch (e: Exception) {
-            Result.failure(e.message ?: "获取进度失败")
+            Result.failure(e)
         }
     }
     
@@ -68,8 +69,6 @@ class GetProgressUseCase @Inject constructor(
     }
     
     private suspend fun getTotalSteps(paperId: Long): Int {
-        return learningRepository.getLearningStepsByPaperId(paperId)
-            .firstOrNull()
-            ?.size ?: 0
+        return learningRepository.getLearningStepsByPaperId(paperId).first().size
     }
 }
