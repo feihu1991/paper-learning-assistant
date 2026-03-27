@@ -1,5 +1,6 @@
 package com.paperlearning.assistant.data.remote.llm
 
+import android.util.Log
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Inject
@@ -12,19 +13,23 @@ import javax.inject.Singleton
 @Singleton
 class LlmClient @Inject constructor() {
 
+    companion object {
+        private const val TAG = "LlmClient"
+    }
+
     private var currentApiService: LlmApiService? = null
     private var currentBaseUrl: String? = null
 
     /**
      * Get or create an API service for the given endpoint.
      * Caches the service to avoid recreating Retrofit instances.
-     * 
+     *
      * @param baseUrl The base URL of the LLM API endpoint
      * @return The LLM API service instance
      */
     private fun getApiService(baseUrl: String): LlmApiService {
-        // Check if we need to create a new Retrofit instance
         if (currentApiService == null || currentBaseUrl != baseUrl) {
+            Log.d(TAG, "Creating new Retrofit instance for: $baseUrl")
             currentApiService = createApiService(baseUrl)
             currentBaseUrl = baseUrl
         }
@@ -33,7 +38,7 @@ class LlmClient @Inject constructor() {
 
     /**
      * Create a new Retrofit API service for the given endpoint.
-     * 
+     *
      * @param baseUrl The base URL of the LLM API endpoint
      * @return A new LLM API service instance
      */
@@ -54,7 +59,7 @@ class LlmClient @Inject constructor() {
 
     /**
      * Send a chat completion request to the specified LLM endpoint.
-     * 
+     *
      * @param baseUrl The base URL of the LLM API endpoint
      * @param apiKey The API key for authentication (format: "Bearer YOUR_KEY")
      * @param request The chat completion request
@@ -69,15 +74,17 @@ class LlmClient @Inject constructor() {
             val apiService = getApiService(baseUrl)
             val authHeader = if (apiKey.startsWith("Bearer ")) apiKey else "Bearer $apiKey"
             val response = apiService.createChatCompletion(authHeader, "application/json", request)
-            
+
             if (response.isSuccessful) {
+                Log.d(TAG, "LLM API call succeeded: ${response.code()}")
                 response.body()
             } else {
-                // Log error or handle appropriately
+                Log.e(TAG, "LLM API call failed: ${response.code()} ${response.message()}")
+                Log.d(TAG, "Response error body: ${response.errorBody()?.string()}")
                 null
             }
         } catch (e: Exception) {
-            // Handle network errors, timeouts, etc.
+            Log.e(TAG, "LLM API network error", e)
             null
         }
     }
@@ -85,7 +92,7 @@ class LlmClient @Inject constructor() {
     /**
      * Send a simple chat message and get the response.
      * Convenience method for basic single-turn conversations.
-     * 
+     *
      * @param baseUrl The base URL of the LLM API endpoint
      * @param apiKey The API key for authentication
      * @param model The model to use
@@ -108,12 +115,12 @@ class LlmClient @Inject constructor() {
             .build()
 
         val response = chatCompletion(baseUrl, apiKey, request)
-        return response.getAssistantResponse()
+        return response?.getAssistantResponse()
     }
 
     /**
      * Validate an API endpoint and key by making a test request.
-     * 
+     *
      * @param baseUrl The base URL to test
      * @param apiKey The API key to test
      * @param model The model to use for testing
@@ -128,10 +135,11 @@ class LlmClient @Inject constructor() {
             val request = LlmRequestBuilder(model)
                 .addUserMessage("Hello")
                 .build()
-            
+
             val response = chatCompletion(baseUrl, apiKey, request)
             response != null && !response.hasError()
         } catch (e: Exception) {
+            Log.e(TAG, "Endpoint validation failed", e)
             false
         }
     }
@@ -143,5 +151,6 @@ class LlmClient @Inject constructor() {
     fun clearCache() {
         currentApiService = null
         currentBaseUrl = null
+        Log.d(TAG, "API service cache cleared")
     }
 }

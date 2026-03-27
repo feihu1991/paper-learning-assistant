@@ -2,6 +2,7 @@ package com.paperlearning.assistant.di
 
 import android.content.Context
 import androidx.room.Room
+import androidx.room.migration.AutoMigrationSpec
 import com.paperlearning.assistant.data.local.PaperDatabase
 import com.paperlearning.assistant.data.local.dao.*
 import dagger.Module
@@ -22,7 +23,13 @@ object DatabaseModule {
             context,
             PaperDatabase::class.java,
             PaperDatabase.DATABASE_NAME
-        ).build()
+        )
+            // Fallback to destructive migration when schema changes.
+            // For production, replace with explicit migration strategy:
+            //   .addMigrations(migration1to2, migration2to3, ...)
+            //   .autoMigrations(autoMigration1to2, autoMigration2to3, ...)
+            .fallbackToDestructiveMigration()
+            .build()
     }
 
     @Provides

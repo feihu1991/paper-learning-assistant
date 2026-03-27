@@ -21,8 +21,12 @@ android {
 
     buildTypes {
         release {
-            isMinifyEnabled = false
-            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            isMinifyEnabled = true
+            isShrinkResources = true
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
         }
     }
     compileOptions {
@@ -82,6 +86,9 @@ dependencies {
     
     // PDF Processing
     implementation("com.github.TomRoush:PdfBox-Android:1.8.10.2")
+    
+    // Security - EncryptedSharedPreferences for API key storage
+    implementation("androidx.security:security-crypto:1.1.0-alpha06")
     
     // Testing
     testImplementation("junit:junit:4.13.2")

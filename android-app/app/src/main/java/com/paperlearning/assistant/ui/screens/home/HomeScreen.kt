@@ -1,5 +1,8 @@
 package com.paperlearning.assistant.ui.screens.home
 
+import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -26,6 +29,30 @@ fun HomeScreen(
     viewModel: HomeViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
+
+    // 论文导入器：打开系统文件选择器，选择 PDF 文件
+    val pdfPickerLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.OpenDocument()
+    ) { uri: Uri? ->
+        uri?.let { viewModel.importPaper(it) }
+    }
+
+    // 成功导入后自动跳转到论文详情页
+    LaunchedEffect(uiState.importSuccess, uiState.importedPaperId) {
+        if (uiState.importSuccess && uiState.importedPaperId != null) {
+            onNavigateToPaperDetail(uiState.importedPaperId!!)
+            viewModel.resetImportState()
+        }
+    }
+
+    // 导入失败时显示 Snackbar
+    val snackbarHostState = remember { SnackbarHostState() }
+    LaunchedEffect(uiState.error) {
+        uiState.error?.let {
+            snackbarHostState.showSnackbar(it)
+            viewModel.clearError()
+        }
+    }
 
     Scaffold(
         topBar = {
@@ -58,7 +85,10 @@ fun HomeScreen(
         },
         floatingActionButton = {
             FloatingActionButton(
-                onClick = { /* TODO: 导入论文 */ },
+                onClick = {
+                    // 打开 PDF 文件选择器，仅显示 PDF 类型
+                    pdfPickerLauncher.launch(arrayOf("application/pdf"))
+                },
                 containerColor = MaterialTheme.colorScheme.primary,
                 contentColor = MaterialTheme.colorScheme.onPrimary
             ) {
@@ -67,7 +97,8 @@ fun HomeScreen(
                     contentDescription = "导入论文"
                 )
             }
-        }
+        },
+        snackbarHost = { SnackbarHost(snackbarHostState) }
     ) { paddingValues ->
         Box(
             modifier = Modifier
@@ -79,28 +110,6 @@ fun HomeScreen(
                     CircularProgressIndicator(
                         modifier = Modifier.align(Alignment.Center)
                     )
-                }
-
-                uiState.error != null -> {
-                    Column(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(16.dp),
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.Center
-                    ) {
-                        Text(
-                            text = "加载失败：${uiState.error}",
-                            color = MaterialTheme.colorScheme.error
-                        )
-                        Spacer(modifier = Modifier.height(8.dp))
-                        Button(onClick = {
-                            viewModel.clearError()
-                            viewModel.refresh()
-                        }) {
-                            Text("重试")
-                        }
-                    }
                 }
 
                 else -> {

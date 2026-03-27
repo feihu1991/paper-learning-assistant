@@ -34,6 +34,7 @@
         android:theme="@style/Theme.PaperLearningAssistant"
         android:hardwareAccelerated="true"
         android:largeHeap="true"
+        android:networkSecurityConfig="@xml/network_security_config"
         tools:targetApi="31">
 
         <!-- 主活动 -->
@@ -49,12 +50,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <!-- 文件选择器活动 -->
-        <activity
-            android:name=".ui.screens.home.FilePickerActivity"
-            android:exported="false"
-            android:theme="@style/Theme.PaperLearningAssistant" />
 
         <!-- 后台服务工作器 -->
         <service

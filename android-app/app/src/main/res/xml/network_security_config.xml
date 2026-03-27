@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<network-security-config>
+    <!--
+        Base configuration: deny cleartext traffic by default.
+        This prevents API keys from being sent over unencrypted HTTP.
+    -->
+    <base-config cleartextTrafficPermitted="false">
+        <trust-anchors>
+            <certificates src="system" />
+        </trust-anchors>
+    </base-config>
+
+    <!--
+        Allow cleartext only for arXiv's HTTP API.
+        The arXiv API does not support HTTPS, and no sensitive credentials are transmitted.
+        Only paper metadata (title, abstract) is fetched via this endpoint.
+    -->
+    <domain-config cleartextTrafficPermitted="true">
+        <domain includeSubdomains="true">export.arxiv.org</domain>
+        <domain includeSubdomains="true">arxiv.org</domain>
+    </domain-config>
+
+    <!--
+        For any other API endpoint (LLM providers like OpenAI, Anthropic, etc.),
+        HTTPS is mandatory. API keys will not be transmitted over HTTP.
+    -->
+</network-security-config>
