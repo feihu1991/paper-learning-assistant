@@ -25,6 +25,6 @@ interface PaperDao {
     @Query("SELECT * FROM papers WHERE parsedStatus = :status")
     fun getByStatus(status: Int): Flow<List<PaperEntity>>
 
-    @Query("SELECT * FROM papers WHERE title LIKE '%' || :query || '%' OR paper_abstract LIKE '%' || :query || '%'")
+    @Query("SELECT * FROM papers WHERE title LIKE '%' || :query || '%' OR paperAbstract LIKE '%' || :query || '%'")
     fun search(query: String): Flow<List<PaperEntity>>
 }
