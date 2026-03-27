@@ -22,7 +22,7 @@ data class LearningUiState(
     val learningSteps: List<LearningStepEntity> = emptyList(),
     val currentStepIndex: Int = 0,
     val completedSteps: List<Int> = emptyList(),
-    val learningMode: LearningMode = LearningMode.SEQUENTIAL,
+    val learningMode: LearningMode = LearningMode.STANDARD,
     val isLoading: Boolean = false,
     val isCompleted: Boolean = false,
     val error: String? = null,
@@ -112,7 +112,7 @@ class LearningViewModel @Inject constructor(
             if (totalSteps > 0) {
                 learningRepository.startLearningSession(
                     paperId = paperId,
-                    learningMode = LearningMode.SEQUENTIAL,
+                    learningMode = LearningMode.STANDARD,
                     totalSteps = totalSteps
                 )
             }

@@ -294,8 +294,8 @@ private fun LearningContent(
                         Icon(
                             imageVector = when {
                                 index == currentStepIndex -> Icons.Default.PlayArrow
-                                index in completedSteps -> Icons.Default.Check
-                                else -> Icons.Default.CircleOut
+                                index in completedSteps -> Icons.Filled.Done
+                                else -> Icons.Filled.RadioButtonUnchecked
                             },
                             contentDescription = null,
                             tint = when {
@@ -351,7 +351,7 @@ private fun LearningCompletedScreen(
     ) {
         // 完成图标
         Icon(
-            imageVector = Icons.Default.CheckCircle,
+            imageVector = Icons.Filled.CheckCircle,
             contentDescription = null,
             tint = MaterialTheme.colorScheme.primary,
             modifier = Modifier.size(96.dp)
