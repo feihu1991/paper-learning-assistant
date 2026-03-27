@@ -92,7 +92,7 @@ class LearningRepository @Inject constructor(
 
     private suspend fun getTotalSteps(paperId: Long): Int {
         return getLearningStepsByPaperId(paperId)
-            .firstOrNull()
-            ?.size ?: 0
+            .first()
+            .size
     }
 }

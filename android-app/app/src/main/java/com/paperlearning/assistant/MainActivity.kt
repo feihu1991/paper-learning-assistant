@@ -25,7 +25,13 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    HomeScreen()
+                    HomeScreen(
+                        onNavigateToSearch = { /* TODO: navigate to search screen */ },
+                        onNavigateToPaperDetail = { paperId ->
+                            // TODO: navigate to paper detail
+                            android.util.Log.d("MainActivity", "Navigate to paper: $paperId")
+                        }
+                    )
                 }
             }
         }
