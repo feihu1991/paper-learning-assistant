@@ -43,7 +43,7 @@ fun PaperCard(
                 contentAlignment = Alignment.Center
             ) {
                 Icon(
-                    imageVector = Icons.Filled.Description,
+                    imageVector = Icons.Default.Description,
                     contentDescription = null,
                     tint = when (paper.parsedStatus) {
                         ParseStatus.COMPLETED -> MaterialTheme.colorScheme.primary

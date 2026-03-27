@@ -1,6 +1,9 @@
 package com.paperlearning.assistant.ui.components
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -8,7 +11,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 
 /**
  * 步骤进度指示器组件
@@ -89,66 +94,46 @@ private fun StepIndicatorDot(
     val size = if (isCurrent) 32.dp else 28.dp
     val fontSize = if (isCurrent) MaterialTheme.typography.labelMedium else MaterialTheme.typography.labelSmall
 
-    if (isClickable) {
-        IconButton(
-            onClick = onClick,
-            modifier = Modifier.size(size)
-        ) {
-            StepDotContent(
-                stepNumber = stepNumber,
-                backgroundColor = backgroundColor,
-                contentColor = contentColor,
-                fontSize = fontSize,
-                isCompleted = isCompleted,
-                isCurrent = isCurrent
-            )
-        }
-    } else {
+    val composable: @Composable () -> Unit = {
         Box(
-            modifier = Modifier.size(size),
+            modifier = Modifier
+                .size(size)
+                .clip(CircleShape)
+                .background(backgroundColor),
             contentAlignment = Alignment.Center
         ) {
-            StepDotContent(
-                stepNumber = stepNumber,
-                backgroundColor = backgroundColor,
-                contentColor = contentColor,
-                fontSize = fontSize,
-                isCompleted = isCompleted,
-                isCurrent = isCurrent
-            )
+            if (isCompleted && !isCurrent) {
+                // 已完成状态：显示勾选符号
+                Text(
+                    text = "✓",
+                    color = contentColor,
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.Bold,
+                    textAlign = TextAlign.Center
+                )
+            } else {
+                // 未完成状态：显示序号
+                Text(
+                    text = stepNumber.toString(),
+                    style = fontSize,
+                    fontWeight = FontWeight.Bold,
+                    color = contentColor
+                )
+            }
         }
     }
-}
 
-@Composable
-private fun StepDotContent(
-    stepNumber: Int,
-    backgroundColor: Color,
-    contentColor: Color,
-    fontSize: androidx.compose.ui.text.TextStyle,
-    isCompleted: Boolean,
-    isCurrent: Boolean
-) {
-    Surface(
-        shape = MaterialTheme.shapes.medium,
-        color = backgroundColor,
-        modifier = Modifier.fillMaxSize()
-    ) {
-        if (isCompleted && !isCurrent) {
-            Icon(
-                imageVector = androidx.compose.material.icons.Icons.Filled.CheckCircle,
-                contentDescription = "已完成",
-                tint = contentColor,
-                modifier = Modifier.size(16.dp)
-            )
-        } else {
-            Text(
-                text = stepNumber.toString(),
-                style = fontSize,
-                fontWeight = FontWeight.Bold,
-                color = contentColor
-            )
+    if (isClickable) {
+        Box(
+            modifier = Modifier
+                .size(size)
+                .clickable(onClick = onClick),
+            contentAlignment = Alignment.Center
+        ) {
+            composable()
         }
+    } else {
+        composable()
     }
 }
 
